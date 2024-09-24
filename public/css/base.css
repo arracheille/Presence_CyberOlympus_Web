@@ -1,0 +1,253 @@
+:root {
+    --darkblue: #05162b;
+    --blue: #163155;
+    --white: #ffffff;
+    --white-30: rgba(255, 255, 255, 0.3);
+
+    --orange-vertical: linear-gradient(to bottom, #fce38a, #f38181);
+    --red-vertical: linear-gradient(to bottom, #f54ea2, #ff7676);
+    --blue-vertical: linear-gradient(to bottom, #6677cc, #2929cc);
+    --green-vertical: linear-gradient(to bottom, #42e695, #3bb2b8);
+    --pink-vertical: linear-gradient(to bottom, #fed1c7, #fe8dc6);
+    --purple-vertical: linear-gradient(to bottom, #737dfe, #ffcac9);
+
+    --orange-horizontal: linear-gradient(to right, #fce38a, #f38181);
+    --red-horizontal: linear-gradient(to right, #f54ea2, #ff7676);
+    --blue-horizontal: linear-gradient(90deg, #6677cc, #2929cc);
+    --green-horizontal: linear-gradient(to right, #42e695, #3bb2b8);
+    --pink-horizontal: linear-gradient(to right, #fed1c7, #fe8dc6);
+    --purple-horizontal: linear-gradient(to right, #737dfe, #ffcac9);
+
+    --size-xl: 40px;
+    --size-l: 30px;
+    --size-n: 25px;
+    --size-m: 20px;
+    --size-s: 16px;
+    --size-xs: 10px;
+
+    --shadow: 0 0 3px #ffffff;
+
+    --border-container: 5px;
+    --border-button-input: 50px;
+}
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+h1 {
+    font-size: var(--size-xl);
+}
+h2 {
+    font-size: var(--size-l);
+}
+h3 {
+    font-size: var(--size-n);
+}
+h4,
+.btn {
+    font-size: var(--size-m);
+}
+p,
+input,
+.btn-trans,
+h5 {
+    font-size: var(--size-s);
+}
+.gradient-text-blue {
+    background: var(--blue-horizontal);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.gradient-v-blue {
+    background: var(--blue-vertical);
+}
+.gradient-h-blue,
+#gradient-blue {
+    background: var(--blue-horizontal);
+}
+.gradient-text-red {
+    background: var(--red-horizontal);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.gradient-v-red {
+    background: var(--red-vertical);
+}
+.gradient-h-red,
+#gradient-red {
+    background: var(--red-horizontal);
+}
+.gradient-text-orange {
+    background: var(--orange-horizontal);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.gradient-v-orange {
+    background: var(--orange-vertical);
+}
+.gradient-h-orange,
+#gradient-orange {
+    background: var(--orange-horizontal);
+}
+.gradient-text-green {
+    background: var(--green-horizontal);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.gradient-v-green {
+    background: var(--green-vertical);
+}
+.gradient-h-green,
+#gradient-green {
+    background: var(--green-horizontal);
+}
+.gradient-text-pink {
+    background: var(--pink-horizontal);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.gradient-v-pink {
+    background: var(--pink-vertical);
+}
+.gradient-h-pink,
+#gradient-pink {
+    background: var(--pink-horizontal);
+}
+.gradient-text-purple {
+    background: var(--purple-horizontal);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.gradient-v-purple {
+    background: var(--purple-vertical);
+}
+.gradient-h-purple,
+#gradient-purple {
+    background: var(--purple-horizontal);
+}
+#darkblue{
+    background: var(--darkblue);
+}
+.gradient-h-blue,
+.gradient-h-red,
+.gradient-h-orange,
+.gradient-h-green,
+.gradient-h-pink,
+.gradient-h-purple,
+.gradient-text-blue,
+.gradient-text-red,
+.gradient-text-orange,
+.gradient-text-green,
+.gradient-text-pink,
+.gradient-text-purple {
+    width: fit-content;
+}
+* {
+    padding: 0;
+    margin: 0;
+    font-weight: 600;
+}
+body,
+html {
+    background-color: var(--darkblue);
+    color: var(--white);
+    font-family: "Poppins", serif;
+    font-weight: 500;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+button,
+.btn {
+    padding: 10px 20px;
+    border-radius: var(--border-button-input);
+    border: none;
+    font-family: "Poppins", serif;
+    font-weight: 600;
+    color: var(--white);
+    background-color: var(--darkblue);
+    font-size: var(--size-s);
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s ease;
+    width: fit-content;
+}
+.btn-trans {
+    background: var(--white-30);
+    border-radius: var(--border-button-input);
+}
+.btn-small {
+    padding: 5px 30px;
+}
+button:hover,
+a:hover {
+    transform: translateY(-3px);
+}
+a {
+    color: var(--white);
+    text-decoration: none;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+.icon {
+    padding: 0;
+    background-color: transparent;
+    font-size: var(--size-m);
+}
+img.icon{
+    height: var(--size-xl);
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-xs);
+}
+input,
+textarea,
+select,
+option {
+    outline: none;
+    font-size: var(--size-s);
+    padding: 0 var(--size-l);
+    border-radius: var(--border-button-input);
+    border: none;
+    background: var(--darkblue);
+    transition: 0.1s ease;
+    padding: var(--size-s);
+    color: var(--white);
+    font-weight: 600;
+    font-family: "Poppins", serif;
+}
+input::placeholder,
+textarea::placeholder {
+    color: var(--white);
+    font-family: "Poppins", serif;
+    font-weight: 500;
+}
+textarea:focus,
+textarea:valid,
+select:focus,
+select:valid,
+input:focus,
+input:valid {
+    color: var(--white);
+}
+select:valid,
+textarea:valid,
+input:valid {
+    background: var(--blue-horizontal);
+}
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+ul,
+li {
+    list-style: none;
+}
+.delete-btn {
+    background: var(--red-horizontal);
+}
+.submit-btn {
+    background: var(--blue-horizontal);
+}

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Presence</title>
+    <link rel="stylesheet" href="Assets/css/presence.css" />
+    <link rel="stylesheet" href="Assets/css/dashboard.css" />
+    <script src="https://kit.fontawesome.com/1a293db120.js" crossorigin="anonymous" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <div class="dashboard">
+      <section class="sidebar">
+        <div class="sidebar-content">
+          <a href="dashboard.html"><i class="fa-solid fa-house-chimney"></i> Dashboard</a>
+          <a href="presence.html"><i class="fa-solid fa-clipboard-user"></i> Attendance</a>
+          <a href="schedule.html"><i class="fa-solid fa-calendar-days"></i> Schedule</a>
+          <a href="todo.html" class="chosen"><i class="fa-solid fa-clipboard-list"></i> To-Do</a>
+          <a href="settings.html"><i class="fa-solid fa-gears"></i> Settings</a>
+        </div>
+      </section>
+      <section class="nav">
+        <div class="nav-content">
+          <div class="nav-title-user">
+            <h2>Presence</h2>
+            <div class="nav-user">
+              <h3>Hello, <span>Username</span></h3>
+              <p>Today Is July 4th 2024</p>
+            </div>
+          </div>
+          <div class="user-profile-log-out">
+            <div class="nav-user-profile">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <a href="index.html" class="icon"><i class="fa-solid fa-right-from-bracket"></i></a>
+          </div>
+        </div>
+      </section>
+      <section class="dashboard-content">
+        <h2>Your Tasks</h2>
+        <div class="dashboard-to-do-wrapper">
+          <div class="dashboard-to-do">
+            <div class="dashboard-to-do-card">
+              <div class="to-do-card-top">
+                <h4>Figma</h4>
+              </div>
+              <div class="to-do-card-item" id="edit-card-item">
+                <p>Make A design</p>
+              </div>
+              <div class="to-do-card-item" id="edit-card-item">
+                <p>Edit user page</p>
+              </div>
+              <button class="to-do-card-item add-to-do-card-item" id="add-card-item">
+                <i class="fa-solid fa-plus"></i>
+                <p class="p-bold">Add Another Card</p>
+              </button>
+            </div>
+            <div class="dashboard-to-do-card">
+              <div class="to-do-card-top">
+                <h4>Front-end</h4>
+              </div>
+              <div class="to-do-card-item" id="edit-card-item">
+                <p>Add More Page</p>
+              </div>
+              <button class="to-do-card-item add-to-do-card-item" id="add-card-item">
+                <i class="fa-solid fa-plus"></i>
+                <p class="p-bold">Add Another Card</p>
+              </button>
+            </div>
+            <div class="dashboard-to-do-card">
+              <div class="to-do-card-top">
+                <h4>Laravel</h4>
+              </div>
+              <div class="to-do-card-item" id="edit-card-item">
+                <p>Make User Database</p>
+              </div>
+              <div class="to-do-card-item" id="edit-card-item">
+                <p>Make Model</p>
+              </div>
+              <div class="to-do-card-item" id="edit-card-item">
+                <p>Fix Views</p>
+              </div>
+              <button class="to-do-card-item add-to-do-card-item" id="add-card-item">
+                <i class="fa-solid fa-plus"></i>
+                <p class="p-bold">Add Another Card</p>
+              </button>
+            </div>
+            <div class="dashboard-to-do-card">
+              <div class="to-do-card-top">
+                <h4>Database</h4>
+              </div>
+              <div class="to-do-card-item" id="edit-card-item">
+                <p>Setup Database Schema</p>
+              </div>
+              <div class="to-do-card-item" id="edit-card-item">
+                <p>Write SQL Queries</p>
+              </div>
+              <div class="to-do-card-item" id="edit-card-item">
+                <p>Optimize Queries</p>
+              </div>
+              <div class="to-do-card-item" id="edit-card-item">
+                <p>Backup Data</p>
+              </div>
+              <button class="to-do-card-item add-to-do-card-item" id="add-card-item">
+                <i class="fa-solid fa-plus"></i>
+                <p class="p-bold">Add Another Card</p>
+              </button>
+            </div>
+            <div class="dashboard-to-do-card">
+              <div class="to-do-card-top">
+                <h4>Design</h4>
+              </div>
+              <div class="to-do-card-item" id="edit-card-item">
+                <p>Create Wireframes</p>
+              </div>
+              <div class="to-do-card-item" id="edit-card-item">
+                <p>Design Mockups</p>
+              </div>
+              <div class="to-do-card-item" id="edit-card-item">
+                <p>Gather Feedback</p>
+              </div>
+              <div class="to-do-card-item" id="edit-card-item">
+                <p>Finalize Design</p>
+              </div>
+              <button class="to-do-card-item add-to-do-card-item" id="add-card-item">
+                <i class="fa-solid fa-plus"></i>
+                <p class="p-bold">Add Another Card</p>
+              </button>
+            </div>
+            <div class="dashboard-to-do-card">
+              <div class="to-do-card-top">
+                <h4>Card Title</h4>
+              </div>
+              <div class="to-do-card-item" id="edit-card-item">
+                <h5>Card Item Title</h5>
+                <p>Description</p>
+              </div>
+            </div>
+            <div class="dashboard-to-do-card add-card" id="add-card">
+              <button class="to-do-card-item add-to-do-card-item" id="add-card">
+                <i class="fa-solid fa-plus"></i>
+                <p class="p-bold">Add Another List</p>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div id="editcarditemModal" class="modal">
+        <div class="modal-content">
+          <span class="close" id="close-editcarditem-modal">&times;</span>
+          <h2>Edit Card Item</h2>
+          <form>
+            <label for="card-item-name">Card Item Name:</label>
+            <input type="text" name="card-item-name" id="card-item-name" placeholder="Example: Team Project" />
+            <div class="modal-footer">
+              <button type="button" class="cancel-btn" id="cancel-editcarditem-modal">Cancel</button>
+              <button type="submit" class="submit-btn" id="modal-submit-btn">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div id="addcarditemModal" class="modal">
+        <div class="modal-content">
+          <span class="close" id="close-carditem-modal">&times;</span>
+          <h2>Add Card Item</h2>
+          <form>
+            <label for="card-item-name">Card Item Name:</label>
+            <input type="text" name="card-item-name" id="card-item-name" placeholder="Example: Team Project" />
+            <label for="card-item-desc">Card Item Description:</label>
+            <textarea name="card-item-desc" id="card-item-desc" placeholder="Example: Team Project"></textarea>
+            <div class="modal-footer">
+              <button type="button" class="cancel-btn" id="cancel-carditem-modal">Cancel</button>
+              <button type="submit" class="submit-btn" id="modal-submit-btn">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div id="addcardModal" class="modal">
+        <div class="modal-content">
+          <span class="close" id="close-card-modal">&times;</span>
+          <h2>Add New List</h2>
+          <form>
+            <label for="list-name">List Name:</label>
+            <input type="text" name="card-name" id="card-name" placeholder="Example: Back-End" />
+            <div class="modal-footer">
+              <button type="button" class="cancel-card-btn" id="cancel-card-modal">Cancel</button>
+              <button type="submit" class="submit-btn" id="modal-submit-btn">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      var carditemmodal = document.getElementById("addcarditemModal");
+      var opencarditems = document.querySelectorAll("#add-card-item");
+      var carditemexit = document.getElementById("close-carditem-modal");
+      var carditemcancel = document.getElementById("cancel-carditem-modal");
+      opencarditems.forEach(function (button) {
+        button.onclick = function () {
+          carditemmodal.style.display = "block";
+        };
+      });
+      carditemexit.onclick = function () {
+        carditemmodal.style.display = "none";
+      };
+      carditemcancel.onclick = function () {
+        carditemmodal.style.display = "none";
+      };
+      window.onclick = function (event) {
+        if (event.target == carditemmodal) {
+          carditemmodal.style.display = "none";
+        }
+      };
+
+      var editcarditemmodal = document.getElementById("editcarditemModal");
+      var openeditcarditems = document.querySelectorAll("#edit-card-item");
+      var editcarditemexit = document.getElementById("close-editcarditem-modal");
+      var editcarditemcancel = document.getElementById("cancel-editcarditem-modal");
+      openeditcarditems.forEach(function (button) {
+        button.onclick = function () {
+          editcarditemmodal.style.display = "block";
+        };
+      });
+      editcarditemexit.onclick = function () {
+        editcarditemmodal.style.display = "none";
+      };
+      editcarditemcancel.onclick = function () {
+        editcarditemmodal.style.display = "none";
+      };
+      window.onclick = function (event) {
+        if (event.target == editcarditemmodal) {
+          editcarditemmodal.style.display = "none";
+        }
+      };
+
+      var cardmodal = document.getElementById("addcardModal");
+      var opencard = document.getElementById("add-card");
+      var cardexit = document.getElementById("close-card-modal");
+      var cardcancel = document.getElementById("cancel-card-modal");
+      opencard.onclick = function () {
+        cardmodal.style.display = "block";
+      };
+      cardexit.onclick = function () {
+        cardmodal.style.display = "none";
+      };
+      cardcancel.onclick = function () {
+        cardmodal.style.display = "none";
+      };
+      window.onclick = function (event) {
+        if (event.target == cardmodal) {
+          cardmodal.style.display = "none";
+        }
+      };
+    </script>
+  </body>
+</html>

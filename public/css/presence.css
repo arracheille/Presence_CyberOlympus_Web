@@ -1,0 +1,319 @@
+@import url(https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap);
+:root {
+    --white: #f7f7f7;
+    --whitetransparent: #f7f7f7db;
+    --darkblue: #272343;
+    --teal: #7ba0a0;
+    --lightteal: #bae8e8;
+    --red: #dc8686;
+    --gradient-orange: linear-gradient(to right, #fce38a, #f38181);
+    --gradient-red: linear-gradient(to right, #f54ea2, #ff7676);
+    --gradient-blue: linear-gradient(to right, #6677cc, #2929cc);
+    --gradient-green: linear-gradient(to right, #42e695, #3bb2b8);
+    --gradient-pink: linear-gradient(to right, #fed1c7, #fe8dc6);
+    --gradient-purple: linear-gradient(to right, #737dfe, #ffcac9);
+}
+body,
+html {
+    font-family: "Poppins", sans-serif;
+    background-color: var(--darkblue);
+    background: linear-gradient(to bottom, var(--darkblue), var(--teal));
+    overflow-x: hidden;
+}
+* {
+    box-sizing: border-box;
+}
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+section {
+    padding: 1rem 2rem;
+}
+body,
+html,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    padding: 0;
+    margin: 0;
+}
+body,
+html,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+input,
+label,
+select,
+option,
+textarea,
+button,
+a {
+    color: var(--white);
+}
+h1 {
+    font-weight: 600;
+    font-size: 2em;
+}
+h2 {
+    font-weight: 600;
+    font-size: 1.6em;
+}
+h3 {
+    font-weight: 500;
+    font-size: 1.4em;
+}
+h4,
+th {
+    font-weight: 600;
+    font-size: 1.2em;
+}
+p,
+input,
+textarea,
+label,
+select,
+option,
+button,
+a,
+td {
+    font-weight: 500;
+    font-size: 1em;
+}
+h5 {
+    font-weight: 600;
+    font-size: 1.1em;
+}
+a {
+    text-decoration: none;
+}
+ul,
+li {
+    list-style: none;
+}
+button,
+.icon,
+.btn,
+.welcome-links a {
+    border: none;
+    border-radius: 20px;
+    font-family: "Poppins", sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+}
+.landing {
+    height: 100vh;
+}
+button,
+.welcome-links a {
+    padding: 0.4rem 2rem;
+    background-color: var(--darkblue);
+    color: var(--white);
+}
+.flex-col-al-jus-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--lightteal);
+    font-size: 1.4rem;
+}
+.btn,
+table.admin-table td.td-icons button {
+    background-color: var(--lightteal);
+    color: var(--darkblue);
+    border-radius: 10px;
+    padding: 0.8rem;
+}
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+a span {
+    color: var(--lightteal);
+}
+input,
+textarea,
+select {
+    border: none;
+    color: var(--white);
+    background: transparent;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    border-radius: 10px;
+}
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+}
+input,
+textarea {
+    padding: 0.5rem 1rem;
+}
+select {
+    padding: 0.5rem 0.5rem;
+}
+input::placeholder,
+textarea::placeholder {
+    color: var(--whitetransparent);
+    font-size: 0.8em;
+}
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: brightness(0) invert(1);
+    opacity: 1;
+    cursor: pointer;
+}
+textarea {
+    min-height: 15vh;
+    width: 100%;
+    resize: none;
+}
+.container,
+.to-do-card-item,
+.add-board {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 10px;
+}
+.container {
+    border-radius: 20px;
+}
+.login-register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 0;
+}
+.login,
+.register {
+    height: 70vh;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+.login.container,
+.register.container {
+    padding: 2rem;
+}
+.login.container a,
+.register.container a {
+    color: var(--white);
+}
+.form-login-register,
+.form-content,
+.form-content-remember-password {
+    width: 80%;
+}
+.form-login-register {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.3rem;
+}
+.form-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: solid 1.4px var(--white);
+    border-radius: 20px;
+}
+.form-content input,
+.form-content select,
+.form-content option {
+    width: 100%;
+    border: none;
+}
+.form-content label i {
+    font-size: 1rem;
+}
+.form-content label,
+.form-content input {
+    padding: 0.5rem 1rem;
+}
+.form-content-remember-password {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+}
+.login.welcome {
+    flex-direction: row;
+    gap: 2rem;
+}
+.welcome-content {
+    max-width: 50%;
+}
+.welcome-content img {
+    width: 10%;
+}
+.welcome-content.icon-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background-color: var(--darkblue);
+    height: 100%;
+    border-radius: 20px;
+}
+.welcome-content.text-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.welcome-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+.welcome-links a {
+    width: 100%;
+}
+.login.container a.welcome-register {
+    color: var(--darkblue);
+    background-color: var(--lightteal);
+}
+.text-guest {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+}
+.verify-guest {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+ul {
+    list-style-type: none; /* Menghapus bullet points pada elemen <ul> */
+    padding: 0; /* Menghapus padding default pada <ul> */
+    margin: 0; /* Menghapus margin default pada <ul> */
+}
+li {
+    margin: 0; /* Menghapus margin default pada <li> */
+}

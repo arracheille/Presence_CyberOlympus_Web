@@ -1,0 +1,128 @@
+.container.landing .logo {
+    position: fixed;
+    top: 0;
+    height: 70px;
+}
+.container.landing,
+.container.register,
+.container.login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    box-sizing: border-box;
+}
+.container .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--size-xs);
+}
+.container .logo span {
+    max-width: var(--size-l);
+}
+.container .logo span img {
+    width: 100%;
+}
+.landing-content {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--size-s);
+}
+.landing-content h2 {
+    text-align: center;
+    max-width: 80%;
+}
+.landing-buttons-container {
+    display: flex;
+    gap: var(--size-xs);
+}
+.landing-buttons-container a:first-child {
+    background: var(--orange-vertical);
+}
+.landing-buttons-container a:nth-child(2) {
+    background: var(--blue-vertical);
+}
+.landing-buttons-container a:nth-child(3) {
+    background: var(--green-vertical);
+}
+.register-container,
+.login-container {
+    width: 80vw;
+    padding: var(--size-xl);
+    background-color: var(--blue);
+    border-radius: var(--border-container);
+    gap: var(--size-xl);
+    height: 70vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.register-content,
+.login-content {
+    flex: 1;
+    height: 100%;
+}
+.register-body,
+.login-body {
+    width: 100%;
+}
+.register-body .logo,
+.login-body .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--size-xs);
+}
+.register-body .logo span,
+.login-body .logo span {
+    max-width: var(--size-xl);
+}
+.register-container .register-content,
+.login-container .login-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.register-container .register-content:first-child,
+.login-container .login-content:last-child {
+    background-color: var(--darkblue);
+    border-radius: var(--border-container);
+}
+.register-container .register-content:first-child .register-body,
+.login-container .login-content:last-child .login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.register-container .register-content:last-child .register-body,
+.login-container .login-content:first-child .login-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-s);
+}
+.register-container
+    .register-content:last-child
+    .register-body
+    form
+    input::placeholder {
+    text-align: end;
+}
+.register-button-option,
+.login-button-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.login-remember-me {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.verify-guest {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-xs);
+}
