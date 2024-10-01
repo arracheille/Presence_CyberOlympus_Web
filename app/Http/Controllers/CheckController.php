@@ -32,6 +32,7 @@ class CheckController extends Controller
 
         $checks['title'] = strip_tags($checks['title']);
         $check->update($checks);
+        
         return back()->with('board', $request->board_id);
     }
 

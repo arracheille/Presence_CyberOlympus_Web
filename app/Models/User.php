@@ -45,6 +45,10 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    public function workspaces() {
+        return $this->hasMany(Workspace::class, 'user_id');
+    }
+
     public function boards() {
         return $this->hasMany(Board::class, 'user_id');
     }
@@ -63,5 +67,13 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function attendances() {
         return $this->hasMany(Attendance::class);
+    }
+
+    public function assigns() {
+        return $this->hasMany(Assign::class, 'user_id');
+    }
+
+    public function member() {
+        return $this->hasMany(Member::class, 'user_id');
     }
 }

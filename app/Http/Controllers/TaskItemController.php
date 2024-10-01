@@ -48,20 +48,15 @@ class TaskItemController extends Controller
         $request->validate([
             'item_id' => 'required|exists:task_items,id',
             'new_task_id' => 'required|exists:tasks,id',
+            'order' => 'required|array',
         ]);
-
-        $order = $request->input('order');
-
         $taskItem = TaskItem::find($request->item_id);
-
         $taskItem->task_id = $request->new_task_id;
-
+        $taskItem->save();
+        $order = $request->input('order');
         foreach ($order as $item) {
             TaskItem::where('id', $item['id'])->update(['position' => $item['position']]);
         }
-
-        $taskItem->save();
-
         return response()->json(['status' => 'success'], 200);
     }
 }

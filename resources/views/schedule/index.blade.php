@@ -4,42 +4,7 @@
         <h3>Your Schedules</h3>
         <div id="calendar"></div>
       </div>
-
-    <div id="addscheduleModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-title-close">
-                <h2>Add Schedule</h2>
-                <span class="close" onclick="closeAddschedule()">&times;</span>
-            </div>
-            <form action="/schedule-create" method="POST">
-                @csrf
-                <label for="start">Start Date</label>
-                <input type="datetime-local" id="start-date" name="start" required>
-                <label for="end">End Date</label>
-                <input type="datetime-local" id="end-date" name="end" required>
-                <label for="title">Title :</label>
-                <input type="text" name="title" placeholder="Example : Meeting With Company A">
-                <h4>Choose Background Color</h4>
-                <div class="grid-color">
-                    <input type="radio" id="option-task-item-label-1" name="background_color" value="gradient-orange" checked/>
-                    <label for="option-task-item-label-1" class="radio-button color" id="gradient-orange"></label>
-                    <input type="radio" id="option-task-item-label-2" name="background_color" value="gradient-red" />
-                    <label for="option-task-item-label-2" class="radio-button color" id="gradient-red"></label>
-                    <input type="radio" id="option-task-item-label-3" name="background_color" value="gradient-blue" />
-                    <label for="option-task-item-label-3" class="radio-button color" id="gradient-blue"></label>
-                    <input type="radio" id="option-task-item-label-4" name="background_color" value="gradient-green" />
-                    <label for="option-task-item-label-4" class="radio-button color" id="gradient-green"></label>
-                    <input type="radio" id="option-task-item-label-5" name="background_color" value="gradient-pink" />
-                    <label for="option-task-item-label-5" class="radio-button color" id="gradient-pink"></label>
-                    <input type="radio" id="option-task-item-label-6" name="background_color" value="gradient-purple" />
-                    <label for="option-task-item-label-6" class="radio-button color" id="gradient-purple"></label>
-                </div>
-                <button type="submit" class="submit-btn">Submit</button>
-            </form>
-        </div>
-    </div>
-
-    @foreach ($schedules as $schedule)
+    @foreach ($workspace->schedules as $schedule)
     <div id="editscheduleModal-{{ $schedule->id }}" class="modal">
         <div class="modal-content">
             <div class="modal-title-close">
@@ -92,9 +57,43 @@
         </div>
     </div>
     @endforeach
+    <div id="addscheduleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title-close">
+                <h2>Add Schedule</h2>
+                <span class="close" onclick="closeAddschedule()">&times;</span>
+            </div>
+            <form action="/schedule-create" method="POST">
+                @csrf
+                <input type="hidden" name="workspace_id" value="{{ $workspace->id }}">
+                <label for="start">Start Date</label>
+                <input type="datetime-local" id="start-date" name="start" required>
+                <label for="end">End Date</label>
+                <input type="datetime-local" id="end-date" name="end" required>
+                <label for="title">Title :</label>
+                <input type="text" name="title" placeholder="Example : Meeting With Company A">
+                <h4>Choose Background Color</h4>
+                <div class="grid-color">
+                    <input type="radio" id="option-task-item-label-1" name="background_color" value="gradient-orange" checked/>
+                    <label for="option-task-item-label-1" class="radio-button color" id="gradient-orange"></label>
+                    <input type="radio" id="option-task-item-label-2" name="background_color" value="gradient-red" />
+                    <label for="option-task-item-label-2" class="radio-button color" id="gradient-red"></label>
+                    <input type="radio" id="option-task-item-label-3" name="background_color" value="gradient-blue" />
+                    <label for="option-task-item-label-3" class="radio-button color" id="gradient-blue"></label>
+                    <input type="radio" id="option-task-item-label-4" name="background_color" value="gradient-green" />
+                    <label for="option-task-item-label-4" class="radio-button color" id="gradient-green"></label>
+                    <input type="radio" id="option-task-item-label-5" name="background_color" value="gradient-pink" />
+                    <label for="option-task-item-label-5" class="radio-button color" id="gradient-pink"></label>
+                    <input type="radio" id="option-task-item-label-6" name="background_color" value="gradient-purple" />
+                    <label for="option-task-item-label-6" class="radio-button color" id="gradient-purple"></label>
+                </div>
+                <button class="submit-btn">Submit</button>
+            </form>
+        </div>
+    </div>
 
     <script>
-        var schedules = @json($schedules);
+        var schedules = @json($workspace->schedules);
 
         function openAddschedule(date) {
             document.getElementById('addscheduleModal').style.display = 'block';

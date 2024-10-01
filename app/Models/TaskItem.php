@@ -14,7 +14,6 @@ class TaskItem extends Model
     use SoftDeletes;
     use LogsActivity;
 
-
     protected $fillable = [
         'task_id',
         'title',
@@ -27,7 +26,6 @@ class TaskItem extends Model
         return LogOptions::defaults()
         ->logFillable('*');
     }
-
 
     public function tasks() {
         return $this->belongsTo(Task::class, 'task_id');
@@ -47,5 +45,21 @@ class TaskItem extends Model
 
     public function comments() {
         return $this->hasMany(Comment::class, 'task_item_id');
+    }
+
+    public function attachments() {
+        return $this->hasMany(Attachment::class, 'task_item_id');
+    }
+
+    public function schedules() {
+        return $this->hasMany(Schedule::class, 'task_item_id');
+    }
+
+    public function assigns() {
+        return $this->hasMany(Assign::class, 'task_item_id');
+    }
+
+    public function workspaces() {
+        return $this->belongsTo(Workspace::class);
     }
 }

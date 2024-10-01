@@ -33,7 +33,7 @@
       },
       editable: false,
       dayMaxEvents: true,
-      events: @json($schedules),
+      events: @json($workspace->schedules),
       eventDidMount: function(info) {
         var backgroundColorId = info.event.extendedProps.background_color;
         if (backgroundColorId) {

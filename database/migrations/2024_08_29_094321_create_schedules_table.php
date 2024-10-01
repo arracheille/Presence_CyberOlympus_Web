@@ -17,6 +17,8 @@ return new class extends Migration
             $table->dateTime('start');
             $table->dateTime('end');
             $table->foreignId('user_id')->constrained();
+            $table->foreignId('workspace_id')->constrained();
+            $table->foreignId('task_item_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

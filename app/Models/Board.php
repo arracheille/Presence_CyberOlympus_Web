@@ -15,7 +15,7 @@ class Board extends Model
     use SoftDeletes;
     use LogsActivity;
 
-    protected $fillable = ['title', 'user_id', 'background_color'];
+    protected $fillable = ['title', 'user_id', 'workspace_id', 'background_color', 'visibility'];
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -25,6 +25,11 @@ class Board extends Model
 
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function workspace()
+    {
+        return $this->belongsTo(Workspace::class, 'workspace_id');
     }
 
     public function tasks() {

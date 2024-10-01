@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Workspace;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -40,6 +41,14 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // Workspace::create([
+        //     'title' => $user->name,
+        //     'user_id' => $user->id,
+        //     'type' => 'Unique',
+        //     'description' => null,
+        //     'unique_code' => md5(microtime(true).mt_Rand()),
+        // ]);
 
         event(new Registered($user));
 

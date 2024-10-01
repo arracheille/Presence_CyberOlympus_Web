@@ -14,12 +14,13 @@ class Schedule extends Model
     use SoftDeletes;
     use LogsActivity;
 
-
     protected $fillable = [
         'title', 
         'start', 
         'end',
         'user_id',
+        'task_item_id',
+        'workspace_id',
         'background_color'
     ];
 
@@ -29,7 +30,15 @@ class Schedule extends Model
         ->logFillable('*');
     }
 
+    public function workspace() {
+        return $this->belongsTo(Workspace::class, 'workspace_id');
+    }
+
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function taskitems() {
+        return $this->belongsTo(TaskItem::class, 'task_item_id');
     }
 }

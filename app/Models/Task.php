@@ -14,7 +14,6 @@ class Task extends Model
     use SoftDeletes;
     use LogsActivity;
 
-
     protected $fillable = ['title', 'user_id', 'board_id', 'position', 'background_color'];
 
     public function getActivitylogOptions(): LogOptions
@@ -22,7 +21,6 @@ class Task extends Model
         return LogOptions::defaults()
         ->logFillable('*');
     }
-
 
     public function board() {
         return $this->belongsTo(Board::class);
@@ -34,5 +32,9 @@ class Task extends Model
 
     public function taskitems() {
         return $this->hasMany(TaskItem::class);
+    }
+
+    public function assigns() {
+        return $this->hasMany(Assign::class, 'task_id');
     }
 }

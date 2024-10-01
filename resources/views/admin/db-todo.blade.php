@@ -1,12 +1,9 @@
 <x-app-layout>
   @include('admin.css')
   <h3>User To-Dos</h3>
-  <div class="filters">
-    <form>
-      <input type="text" id="filter-board-task" name="filter-board-task" placeholder="Search..." />
-      <button type="submit">Filter</button>
-    </form>
-  </div>
+  {{-- <div class="filters">
+    <input type="search" placeholder="Search..." wire:model="searchTerm"/>
+  </div> --}}
   @if ($boards->isEmpty())
   <p>No Boards Yet.</p>
   @else
@@ -38,7 +35,10 @@
             $board_color = "darkblue";
             }
           @endphp
-          <td class="admin-th-todo text-center" id="{{ $board_color }}"><h4>{{ $board->title }}</h4></td>
+          <td class="admin-th-todo text-center" id="{{ $board_color }}">
+            <h3>{{ $board->title }}</h3>
+            <p>Created By: <span>{{ $board->user->name }}</span></p>
+          </td>
           <td>
             <div class="wrapper">
               <div class="task-container">

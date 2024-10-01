@@ -1,5 +1,5 @@
 <x-app-layout>
-  @include('components.css-schedule')
+  {{-- @include('components.css-schedule') --}}
   <div class="dashboard-top">
       <div class="content gradient-v-orange">
         <button class="btn-trans">Check-In Attendance</button>
@@ -25,21 +25,15 @@
           @else
               @foreach ($schedules as $schedule)
               @php
-                if ($schedule['background_color'] == 'gradient-orange') {
-                $color = "gradient-orange";
-                }elseif ($schedule['background_color'] == 'gradient-blue') {
-                $color = "gradient-blue";
-                }elseif ($schedule['background_color'] == 'gradient-green') {
-                $color = "gradient-green";
-                }elseif ($schedule['background_color'] == 'gradient-red') {
-                $color = "gradient-red";
-                }elseif ($schedule['background_color'] == 'gradient-pink') {
-                $color = "gradient-pink";
-                }elseif ($schedule['background_color'] == 'gradient-purple') {
-                $color = "gradient-purple";
-                }else{
-                $color = "darkblue";
-                }
+              $color = match ($schedule['background_color']) {
+                'gradient-orange' => 'gradient-orange',
+                'gradient-blue' => 'gradient-blue',
+                'gradient-green' => 'gradient-green',
+                'gradient-red' => 'gradient-red',
+                'gradient-pink' => 'gradient-pink',
+                'gradient-purple' => 'gradient-purple',
+                default => 'darkblue',
+              };
               @endphp
               <div class="content" id="{{ $color }}">
                 <h3>{{ $schedule->title }}</h3>
@@ -49,8 +43,30 @@
           @endif
           </div>
       </div>
-      <div class="dashboard-task">
-        <h3>Your Tasks</h3>
+      <div class="dashboard-board">
+        <h3>Your Board</h3>
+        <div class="dashboard-board-container">
+          @if ($boards->isEmpty())
+              <p>You haven't created a board yet!</p>
+          @else 
+          @foreach ($boards as $board)
+          @php
+            $board_color = match ($board['background_color']) {
+              'gradient-orange' => 'gradient-orange',
+              'gradient-blue' => 'gradient-blue',
+              'gradient-green' => 'gradient-green',
+              'gradient-red' => 'gradient-red',
+              'gradient-pink' => 'gradient-pink',
+              'gradient-purple' => 'gradient-purple',
+              default => 'darkblue',
+            };
+          @endphp
+          <div class="dashboard-board-content" id="{{ $board_color }}">
+            <a href="/board-task/{{ $board->id }}">{{ $board['title'] }}</a>
+          </div>
+          @endforeach
+          @endif
+        </div>
       </div>
     </div>
     <script>

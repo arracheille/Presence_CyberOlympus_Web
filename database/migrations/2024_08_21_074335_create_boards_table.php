@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->foreignId('user_id')->constrained();
+            $table->foreignId('workspace_id')->constrained();
             $table->string('background_color')->nullable();
             $table->timestamps();
         });
