@@ -13,6 +13,7 @@ use App\Http\Controllers\TaskItemController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CheckController;
 use App\Http\Controllers\ChecklistController;
+use App\Http\Controllers\CodeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CoverController;
 use App\Http\Controllers\DashboardController;
@@ -25,7 +26,7 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\Workspace;
 use Illuminate\Http\Request;
-use App\Http\Middleware\CheckMember;
+// use App\Http\Middleware\CheckMember;
 
 Route::get('/', function () {
     return view('welcome');
@@ -48,9 +49,25 @@ Route::middleware('auth')->group(function () {
         $workspaces = Workspace::all();
         return view('workspaces.index', compact('workspaces'));
     })->name('workspaces.index');
-});
 
-Route::group(['middleware' => ['auth', 'checkmember']], function () {
+    Route::post('/send-w-code', [CodeController::class, 'sendUniqueCode']);
+
+    Route::get('/get-w-code', function (Request $request) {
+        $findWorkspace = Workspace::where('unique_code', $request->unique_code)->first();
+        if ($findWorkspace) {
+            $insertMember = new Member;
+            $insertMember->user_id = auth()->user()->id;
+            $insertMember->email = auth()->user()->email;
+            $insertMember->workspace_id = $findWorkspace->id;
+            $insertMember->unique_code = $findWorkspace->unique_code;
+            $insertMember->save();
+    
+            return redirect('/workspace/' . $findWorkspace->id);
+        } else {
+            return redirect()->back()->with('error', 'Workspace not found!');
+        }
+    })->name('workspaces.join-email');
+
     Route::get('/workspace/{workspace}', function (Workspace $workspace) {
         return view('workspaces.dashboard', compact('workspace'));
     })->name('workspaces.dashboard');
@@ -60,6 +77,7 @@ Route::group(['middleware' => ['auth', 'checkmember']], function () {
         if ($findWorkspace) {
             $insertMember               = new Member;
             $insertMember->user_id      = auth()->user()->id;
+            $insertMember->email        = auth()->user()->email;
             $insertMember->workspace_id = $findWorkspace->id;
             $insertMember->unique_code  = $findWorkspace->unique_code;
             $insertMember->save();

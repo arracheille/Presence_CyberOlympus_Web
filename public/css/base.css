@@ -196,6 +196,7 @@ a {
     transition: transform 0.3s ease;
     cursor: pointer;
 }
+button.icon,
 .icon {
     padding: 0;
     background-color: transparent;

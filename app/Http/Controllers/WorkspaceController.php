@@ -19,12 +19,14 @@ class WorkspaceController extends Controller
         $workspaces['type'] = strip_tags($workspaces['type']);
         $workspaces['description'] = strip_tags($workspaces['description']);
         $workspaces['user_id'] = auth()->id();
+        $workspaces['email'] = auth()->user()->email;
         $workspaces['unique_code'] = md5(microtime(true).mt_Rand());
         $workspacesId = Workspace::create($workspaces);
 
         $createMember               = new Member();
         $createMember->user_id      = auth()->id();
-        $createMember->workspace_id  = $workspacesId->id;
+        $createMember->email        = auth()->user()->email;
+        $createMember->workspace_id = $workspacesId->id;
         $createMember->unique_code  = $workspacesId->unique_code;
         $createMember->save();
         

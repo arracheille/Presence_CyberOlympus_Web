@@ -12,10 +12,10 @@
             </div>
             <div class="task-share">
                 <div class="dropdown">
-                    <button class="link gradient-h-blue">Share</button>
+                    <button class="link gradient-h-blue">Share Workspace</button>
                     <div class="dropdown-menu ">
                         <div class="dropdown-title-close">
-                            <h4>Share Links</h4>
+                            <h4>Share Workspace</h4>
                             <span class="close">&times;</span>
                         </div>
                         <div class="result-container">
@@ -24,6 +24,13 @@
                               <i class="far fa-clipboard"></i>
                             </button>
                         </div>
+                        <p>Or invite user from email</p>
+                        <form action="/send-w-code" method="POST">
+                            @csrf
+                            <input type="hidden" name="unique_code" value="{{ $workspace->unique_code }}">
+                            <input type="email" class="input-join" name="email" placeholder="Example: acwel@gmail.com" required>
+                            <button type="submit">Send Invitation</button>
+                        </form>
                     </div>
                 </div>
             </div>

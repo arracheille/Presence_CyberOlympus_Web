@@ -53,6 +53,13 @@
                                             <i class="far fa-clipboard"></i>
                                         </button>
                                     </div>
+                                    <p>Or invite user from email</p>
+                                    <form action="/send-w-code" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="unique_code" value="{{ $workspace->unique_code }}">
+                                        <input type="email" class="input-join" name="email" placeholder="Example: acwel@gmail.com" required>
+                                        <button type="submit">Send Invitation</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -60,34 +67,57 @@
                     <div class="wrapper">
                         <div class="board-container">
                             @foreach ($workspace->workspace->boards as $board)
-                            @php
-                                if ($board['background_color'] == 'gradient-orange') {
-                                $board_color = "gradient-orange";
-                                }elseif ($board['background_color'] == 'gradient-blue') {
-                                $board_color = "gradient-blue";
-                                }elseif ($board['background_color'] == 'gradient-green') {
-                                $board_color = "gradient-green";
-                                }elseif ($board['background_color'] == 'gradient-red') {
-                                $board_color = "gradient-red";
-                                }elseif ($board['background_color'] == 'gradient-pink') {
-                                $board_color = "gradient-pink";
-                                }elseif ($board['background_color'] == 'gradient-purple') {
-                                $board_color = "gradient-purple";
-                                }else{
-                                $board_color = "white";
-                                }
-                            @endphp
-                            <div class="content-board center" id="{{ $board_color }}">
-                                <a href="/board-task/{{ $board->id }}">{{ $board['title'] }}</a>
-                                <div class="content-board-crud">
-                                    <button class="board-edit gradient-v-blue" onclick="openEditboard({{ $board->id }})">Edit</button>
-                                    <form action="/delete-board/{{ $board->id }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="board-delete gradient-v-red">Delete</button>
-                                    </form>
+                            @if ($board->visibility === 'private' && $board->user_id === auth()->user()->id)
+                                @php
+                                    $board_color = match ($board['background_color']) {
+                                        'gradient-orange' => 'gradient-orange',
+                                        'gradient-blue' => 'gradient-blue',
+                                        'gradient-green' => 'gradient-green',
+                                        'gradient-red' => 'gradient-red',
+                                        'gradient-pink' => 'gradient-pink',
+                                        'gradient-purple' => 'gradient-purple',
+                                        default => 'darkblue',
+                                    };
+                                @endphp
+                                <div class="content-board center" id="{{ $board_color }}">
+                                    <a href="/board-task/{{ $board->id }}">
+                                    <p>{{ $board['title'] }}</p>
+                                    </a>
+                                    <div class="content-board-crud">
+                                        <button class="board-edit gradient-v-blue" onclick="openEditboard({{ $board->id }})">Edit</button>
+                                        <form action="/delete-board/{{ $board->id }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="board-delete gradient-v-red">Delete</button>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
+                            @elseif ($board->visibility !== 'private')
+                                @php
+                                    $board_color = match ($board['background_color']) {
+                                        'gradient-orange' => 'gradient-orange',
+                                        'gradient-blue' => 'gradient-blue',
+                                        'gradient-green' => 'gradient-green',
+                                        'gradient-red' => 'gradient-red',
+                                        'gradient-pink' => 'gradient-pink',
+                                        'gradient-purple' => 'gradient-purple',
+                                        default => 'darkblue',
+                                    };
+                                @endphp
+                                <div class="content-board center" id="{{ $board_color }}">
+                                    <a href="/board-task/{{ $board->id }}">
+                                    <p>{{ $board['title'] }}</p>
+                                    </a>
+                                    <div class="content-board-crud">
+                                        <button class="board-edit gradient-v-blue" onclick="openEditboard({{ $board->id }})">Edit</button>
+                                        <form action="/delete-board/{{ $board->id }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="board-delete gradient-v-red">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            @endif
                             <div id="editBoardmodal-{{ $board->id }}" class="modal">
                                 <div class="modal-content">
                                     <div class="modal-title-close">
@@ -456,6 +486,7 @@
                 <form action="/create-workspace" method="POST">
                     @csrf
                     {{-- <input type="hidden" name="unique_code" value="a"> --}}
+                    <input type="hidden" name="email" value="{{ auth()->user()->email }}">
                     <label for="title">Workspace Title</label>
                     <input type="text" id="title" name="title">
                     <label for="type">Workspace Type</label>

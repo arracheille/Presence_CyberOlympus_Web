@@ -289,7 +289,9 @@
     background: var(--blue);
 }
 input:valid.input-join,
-.dropdown.board-visibility .dropdown-menu form select:valid {
+.input-join,
+.dropdown.board-visibility .dropdown-menu form select:valid,
+.filter-item input[type="text"] {
     border-radius: var(--border-container);
     background: var(--darkblue);
 }
@@ -493,13 +495,12 @@ input:valid.input-join,
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: var(--size-m);
 }
 .modal-content .close,
 .dropdown-menu .close {
     color: var(--white);
     float: right;
-    font-size: var(--size-xl);
+    font-size: var(--size-l);
     cursor: pointer;
 }
 .modal-content form {
@@ -687,7 +688,7 @@ input:valid.input-join,
     right: 0;
     top: calc(100% + 0.5rem);
     background-color: var(--darkblue);
-    padding: var(--size-m);
+    padding: var(--size-s);
     border-radius: var(--border-container);
     box-shadow: 0 20px 35px 0 rgba(0, 0, 0, 0.1);
     opacity: 0;

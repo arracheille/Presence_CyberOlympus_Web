@@ -29,7 +29,14 @@
                             <button class="btn ctoCb" id="clipboard">
                                 <i class="far fa-clipboard"></i>
                             </button>
-                        </div>                        
+                        </div>
+                        <p>Or invite user from email</p>
+                        <form action="/send-w-code" method="POST">
+                            @csrf
+                            <input type="hidden" name="unique_code" value="{{ $workspace->unique_code }}">
+                            <input type="email" class="input-join" name="email" placeholder="Example: acwel@gmail.com" required>
+                            <button type="submit">Send Invitation</button>
+                        </form>                        
                     </div>
                 </div>
             </div>

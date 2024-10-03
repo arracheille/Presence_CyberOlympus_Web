@@ -56,6 +56,8 @@ class ScheduleController extends Controller
         $schedules['background_color'] = strip_tags($schedules['background_color']);
 
         $schedules['user_id'] = auth()->id();
+
+        dd($schedules);
         Schedule::create($schedules);
 
         // return back();

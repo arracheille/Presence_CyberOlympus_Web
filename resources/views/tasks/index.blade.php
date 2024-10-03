@@ -8,13 +8,17 @@
             <div class="task-share">
                 <div class="dropdown">
                     <button class="link gradient-h-blue">Filter</button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu label-modal dropdown-color"">
                         <div class="dropdown-title-close">
                             <h4>Filter Task & Task Item</h4>
                             <span class="close">&times;</span>
                         </div>
-                        <div class="filter-bylabel">
-                            <h4>Filter by label</h4>
+                        <div class="filter-item bytext  color-container">
+                            <h5>Filter by text</h5>
+                            <input type="text" name="search" placeholder="Search...">
+                        </div>
+                        <div class="filter-item bylabel color-container">
+                            <h5>Filter by label</h5>
                             <input type="text" name="label" placeholder="Label Name...">
                             <div class="grid-color">
                                 <input type="radio" id="option-filter-by-label-1" name="label_background_color" value="gradient-orange" checked/>
@@ -29,6 +33,23 @@
                                 <label for="option-filter-by-label-5" class="radio-button color" id="gradient-pink"></label>
                                 <input type="radio" id="option-filter-by-label-6" name="label_background_color" value="gradient-purple" />
                                 <label for="option-filter-by-label-6" class="radio-button color" id="gradient-purple"></label>                                    
+                            </div>
+                        </div>
+                        <div class="filter-item bycolor color-container">
+                            <h5>Filter by background color</h5>
+                            <div class="grid-color">
+                                <input type="radio" id="option-task-item-background-1" name="background_color" value="gradient-orange" checked/>
+                                <label for="option-task-item-background-1" class="radio-button color" id="gradient-orange"></label>
+                                <input type="radio" id="option-task-item-background-2" name="background_color" value="gradient-red" />
+                                <label for="option-task-item-background-2" class="radio-button color" id="gradient-red"></label>
+                                <input type="radio" id="option-task-item-background-3" name="background_color" value="gradient-blue" />
+                                <label for="option-task-item-background-3" class="radio-button color" id="gradient-blue"></label>
+                                <input type="radio" id="option-task-item-background-4" name="background_color" value="gradient-green" />
+                                <label for="option-task-item-background-4" class="radio-button color" id="gradient-green"></label>
+                                <input type="radio" id="option-task-item-background-5" name="background_color" value="gradient-pink" />
+                                <label for="option-task-item-background-5" class="radio-button color" id="gradient-pink"></label>
+                                <input type="radio" id="option-task-item-background-6" name="background_color" value="gradient-purple" />
+                                <label for="option-task-item-background-6" class="radio-button color" id="gradient-purple"></label>                                    
                             </div>
                         </div>
                     </div>
