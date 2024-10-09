@@ -13,7 +13,7 @@ class ScheduleController extends Controller
             'start' => 'required',
             'end' => 'required',
             'background_color' => 'required',
-            'task_item_id' => 'nullable|exists:task_items,id',
+            // 'task_item_id' => 'nullable|exists:task_items,id',
             'workspace_id' => 'required|exists:workspaces,id',
         ]);
 
@@ -21,7 +21,7 @@ class ScheduleController extends Controller
         $schedules['start'] = strip_tags($schedules['start']);
         $schedules['end'] = strip_tags($schedules['end']);
         $schedules['background_color'] = strip_tags($schedules['background_color']);
-        $schedules['task_item_id'] = $request->task_item_id;
+        // $schedules['task_item_id'] = $request->task_item_id;
         $schedules['workspace_id'] = $request->workspace_id;
         $schedules['user_id'] = auth()->id();
 
@@ -57,11 +57,10 @@ class ScheduleController extends Controller
 
         $schedules['user_id'] = auth()->id();
 
-        dd($schedules);
         Schedule::create($schedules);
 
         // return back();
-        return view('tasks.index');
+        return back();
     }
 
     public function edit(Schedule $schedule) {

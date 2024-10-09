@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="member">
-        <div class="workspace-title">
+        {{-- <div class="workspace-title">
             <img src="https://ui-avatars.com/api/?name={{ urlencode($workspace->title) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon" alt="Avatar">
             <div class="workspace-title-author">
                 <h4>{{ $workspace->title }}</h4>
@@ -9,6 +9,13 @@
                 <p>{{ $workspace->description }}</p>
                 @endif
                 <p class="text-small">{{ $workspace->type }}</p>
+            </div>
+            
+        </div> --}}
+        <div class="workspace-title">
+            <div class="member-title">
+                <h2>Workspace Members</h2>
+                <p>From workspace <strong>{{ $workspace->title }}</strong></p>
             </div>
             <div class="task-share">
                 <div class="dropdown">
@@ -35,10 +42,22 @@
                 </div>
             </div>
         </div>
-        <h3>Workspace Members</h3>
         <div class="member-container">
             @foreach ($workspaces as $workspace)
                 @foreach ($workspace->members as $member)
+                    @if (auth()->user()->id === $workspace->user_id)
+                    <a href="{{ url('/workspace' . '/' . $workspace->id . '/member-details' . '/' . $member->id) }}">
+                        <div class="workspace-title">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($member->user->name) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon" alt="Avatar">
+                            <input type="hidden" value="{{ $member->user->id }}">
+                            @if ($member->user_id === $workspace->user_id)
+                            <p>{{ $member->user->name }} <span>(Admin)</span></p>
+                            @else
+                            <p>{{ $member->user->name }}</p>
+                            @endif
+                        </div>
+                    </a>
+                    @else
                     <div class="workspace-title">
                         <img src="https://ui-avatars.com/api/?name={{ urlencode($member->user->name) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon" alt="Avatar">
                         <input type="hidden" value="{{ $member->user->id }}">
@@ -48,6 +67,7 @@
                         <p>{{ $member->user->name }}</p>
                         @endif
                     </div>
+                    @endif
                 @endforeach
             @endforeach
         </div>

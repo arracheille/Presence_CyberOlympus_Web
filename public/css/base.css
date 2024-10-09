@@ -237,13 +237,10 @@ textarea::placeholder {
 }
 textarea:focus,
 textarea:valid,
-select:focus,
-select:valid,
 input:focus,
 input:valid {
     color: var(--white);
 }
-select:valid,
 textarea:valid,
 input:valid {
     background: var(--blue-horizontal);

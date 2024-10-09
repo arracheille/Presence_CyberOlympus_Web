@@ -29,18 +29,18 @@
   <ul>
     <li>
       @foreach ($workspaces as $workspace)
-      <a href="{{ url('/workspace/' . Request::segment(2))}}" 
-      class="{{ request()->is('/workspace/' . Request::segment(2)) ? 'active' : '' }}">
-      <img src="https://ui-avatars.com/api/?name={{ urlencode($workspace->title) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon-small" alt="Avatar">
+      <a href="{{ url('/workspace/' . $workspace->id)}}" 
+        class="{{ request()->is('workspace/' . $workspace->id) ? 'active' : '' }}">
+        <img src="https://ui-avatars.com/api/?name={{ urlencode($workspace->title) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon-small" alt="Avatar">
         <h4>Workspace</h4>
-      </a>
+      </a>    
       @endforeach
     </li>
   </ul>
   <ul>
     @foreach ($workspaces as $workspace)
     <li>
-      <a href="{{ url('/members/' . $workspace->id) }}" class="{{ request()->is('members') ? 'active' : '' }}">
+      <a href="{{ url('/workspace' . '/' . $workspace->id . '/members') }}" class="{{ request()->is('/workspace' . '/' . $workspace->id . '/members') ? 'active' : '' }}">
         <i class="fa-solid fa-user"></i>
         <h4>{{ __('Members') }}</h4>
       </a>
@@ -50,7 +50,7 @@
   <ul>
   @foreach ($workspaces as $workspace)
     <li class="list-data">
-      <a href="{{ url('/boards/' . $workspace->id) }}" class="{{ request()->is('boards') ? 'active' : '' }}">
+      <a href="{{ url('/workspace' . '/' . $workspace->id . '/boards') }}" class="{{ request()->is('/workspace' . '/' . $workspace->id . '/boards') ? 'active' : '' }}">
         <i class="fa-solid fa-tachograph-digital"></i>
         <h4>{{ __('Board') }}</h4>
       </a>
@@ -69,8 +69,8 @@
         };
       @endphp
       <li class="subdata">
-        <a href="{{ url('/board-task/' . $board->id) }}" id="{{ $board_color }}"
-          class="{{ request()->is('board-task/' . $board->id) ? 'active' : '' }}">
+        <a href="{{ url('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) }}" id="{{ $board_color }}"
+          class="{{ request()->is('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) ? 'active' : '' }}">
           <p>{{ $board->title }}</p>
         </a>
       </li>
@@ -87,25 +87,14 @@
         };
       @endphp
       <li class="subdata">
-        <a href="{{ url('/board-task/' . $board->id) }}" id="{{ $board_color }}"
-          class="{{ request()->is('board-task/' . $board->id) ? 'active' : '' }}">
+        <a href="{{ url('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) }}" id="{{ $board_color }}"
+          class="{{ request()->is('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) ? 'active' : '' }}">
           <p>{{ $board->title }}</p>
         </a>
       </li>
     @endif
 
-    {{-- @php
-      $board_color = match ($board['background_color']) {
-          'gradient-orange' => 'gradient-orange',
-          'gradient-blue' => 'gradient-blue',
-          'gradient-green' => 'gradient-green',
-          'gradient-red' => 'gradient-red',
-          'gradient-pink' => 'gradient-pink',
-          'gradient-purple' => 'gradient-purple',
-          default => 'darkblue',
-      };
-    @endphp
-    <li class="subdata">
+    {{-- <li class="subdata">
       <a href="{{ url('/board-task/' . $board->id) }}" id="{{ $board_color }}"
         class="{{ request()->is('board-task/' . $board->id) ? 'active' : '' }}">
         <p>{{ $board->title }}</p>
@@ -117,7 +106,7 @@
   <ul>
     @foreach ($workspaces as $workspace)
     <li>
-      <a href="{{ url('/schedule/' . $workspace->id) }}" class="{{ request()->is('schedule/*') ? 'active' : '' }}">
+      <a href="{{ url('/workspace' . '/' . $workspace->id . '/schedule') }}" class="{{ request()->is('/workspace' . '/' . $workspace->id . '/schedule') ? 'active' : '' }}">
         <i class="fa-solid fa-calendar-days"></i>
         <h4>{{ __('Schedule') }}</h4>
       </a>
@@ -131,6 +120,16 @@
           <h4>{{ __('Attendance') }}</h4>
       </a>
     </li>
+  </ul>
+  <ul>
+    @foreach ($workspaces as $workspace)
+    <li>
+      <a href="{{ url('/workspace' . '/' . $workspace->id . '/settings') }}" class="{{ request()->is('/workspace' . '/' . $workspace->id . '/settings') ? 'active' : '' }}">
+        <i class="fa-solid fa-gears"></i>
+        <h4>{{ __('Settings') }}</h4>
+      </a>
+    </li>
+    @endforeach
   </ul>
   @else
   <ul>

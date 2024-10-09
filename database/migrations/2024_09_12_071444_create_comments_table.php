@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('task_item_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->text('comment');
+            $table->longText('comment');
             $table->timestamps();
         });
     }

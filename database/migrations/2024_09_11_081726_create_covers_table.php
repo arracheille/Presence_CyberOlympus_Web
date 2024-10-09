@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('covers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('task_item_id')->constrained();
-            $table->string('background_color');
+            $table->string('background_color')->nullable();
             $table->timestamps();
         });
     }

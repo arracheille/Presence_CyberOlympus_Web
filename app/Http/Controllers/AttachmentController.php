@@ -11,14 +11,28 @@ class AttachmentController extends Controller
     public function create(Request $request) {
         $request->validate([
             'task_item_id' => 'required|exists:task_items,id',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'link' => 'nullable',
+            'link_display' => 'nullable',
         ]);
-        $imageName = time().'.'.$request->image->extension();
-        $request->image->move(public_path('images'), $imageName);
-        $attachment = new Attachment();
-        $attachment->task_item_id = $request->task_item_id;
-        $attachment->image = 'images/'.$imageName;
-        $attachment->save();
+        if ($request->hasFile('image')) {
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+            $attachments = new Attachment();
+            $attachments->task_item_id = $request->task_item_id;
+            $attachments->image = 'images/'.$imageName;
+        } else {
+            $attachments = new Attachment();
+            $attachments->task_item_id = $request->task_item_id;
+            $attachments->link = $request->link;
+            if (empty($request->link_display)) {
+                $attachments->link_display = $request->link;
+            } else {
+                $attachments->link_display = $request->link_display;
+            }
+        }
+
+        $attachments->save();
 
         return back();
     }
@@ -30,6 +44,8 @@ class AttachmentController extends Controller
     public function update(Attachment $attachment, Request $request) {
         $attachments = $request->validate([
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'link' => 'nullable',
+            'link_display' => 'nullable',
         ]);
     
         if ($request->hasFile('image')) {
@@ -41,6 +57,14 @@ class AttachmentController extends Controller
             $request->image->move(public_path('images'), $imageName);
     
             $attachments['image'] = 'images/'.$imageName;
+        } elseif ($request->filled('link')) {
+            $attachments['link'] = $request->link;
+            // $attachments['link_display'] = $request->link_display;
+            if (empty($request->link_display)) {
+                $attachments['link_display'] = $request->link;
+            } else {
+                $attachments['link_display'] = $request->link_display;
+            }
         }
     
         $attachment->update($attachments);

@@ -10,18 +10,11 @@
                         <span class="close">&times;</span>
                     </div>
                     <div class="dropdown-notification">
-                        @if (isset($notifications) && $notifications->isEmpty())
-                            <p>No notifications.</p>
-                        @elseif (isset($notifications))
-                            @foreach ($notifications as $notification)
-                                <div class="notification-item">
-                                    <p>
-                                        Task <strong>{{ $notification->taskitem->title }}</strong> is due in 
-                                        {{ $notification->end->diffInDays(Carbon::now()) }} days!
-                                    </p>
-                                </div>
-                            @endforeach
-                        @endif
+                       {{-- @if ()
+                           
+                       @else
+                           
+                       @endif --}}
                     </div>
                 </div>
             </div>

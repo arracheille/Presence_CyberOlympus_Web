@@ -17,6 +17,8 @@ class Attachment extends Model
     protected $fillable = [
         'task_item_id',
         'image',
+        'link',
+        'link_display',
     ];
     
     public function getActivitylogOptions(): LogOptions

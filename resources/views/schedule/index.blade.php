@@ -1,7 +1,10 @@
 <x-app-layout>
     @include('components.css-schedule')
     <div class="schedule">
-        <h3>Your Schedules</h3>
+        <div class="schedule-title">
+            <h2>Workspace Schedules</h2>
+            <p>From workspace <strong>{{ $workspace->title }}</strong></p>
+        </div>
         <div id="calendar"></div>
       </div>
     @foreach ($workspace->schedules as $schedule)

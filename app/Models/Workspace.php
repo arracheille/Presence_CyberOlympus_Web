@@ -12,7 +12,7 @@ class Workspace extends Model
     use HasFactory;
     use LogsActivity;
 
-    protected $fillable = ['title', 'type', 'description', 'user_id', 'unique_code', 'email'];
+    protected $fillable = ['title', 'type', 'description', 'user_id', 'unique_code', 'email', 'role'];
 
     public function getActivitylogOptions(): LogOptions
     {

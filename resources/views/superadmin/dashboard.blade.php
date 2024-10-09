@@ -18,7 +18,7 @@
     </div>
     <div class="dashboard-bottom">
       <div class="dashboard-schedule">
-        <h3>Your Weekly Schedules</h3>
+        <h3>Your Newest Weekly Schedules</h3>
           <div class="dashboard-schedule-container">
             @if($schedules->isEmpty())
               <p>No schedules</p>
@@ -44,28 +44,28 @@
           </div>
       </div>
       <div class="dashboard-board">
-        <h3>Your Board</h3>
+        <h3>Your Newest Boards</h3>
         <div class="dashboard-board-container">
-          @if ($boards->isEmpty())
-              <p>You haven't created a board yet!</p>
-          @else 
-          @foreach ($boards as $board)
-          @php
-            $board_color = match ($board['background_color']) {
-              'gradient-orange' => 'gradient-orange',
-              'gradient-blue' => 'gradient-blue',
-              'gradient-green' => 'gradient-green',
-              'gradient-red' => 'gradient-red',
-              'gradient-pink' => 'gradient-pink',
-              'gradient-purple' => 'gradient-purple',
-              default => 'darkblue',
-            };
-          @endphp
-          <div class="dashboard-board-content" id="{{ $board_color }}">
-            <a href="/board-task/{{ $board->id }}">{{ $board['title'] }}</a>
-          </div>
-          @endforeach
+          @forelse ($boards->sortByDesc('created_at')->take(3) as $board)
+          @if ($board->user_id === auth()->user()->id)
+            @php
+              $board_color = match ($board['background_color']) {
+                'gradient-orange' => 'gradient-orange',
+                'gradient-blue' => 'gradient-blue',
+                'gradient-green' => 'gradient-green',
+                'gradient-red' => 'gradient-red',
+                'gradient-pink' => 'gradient-pink',
+                'gradient-purple' => 'gradient-purple',
+                default => 'darkblue',
+              };
+            @endphp
+            <div class="dashboard-board-content" id="{{ $board_color }}">
+              <a href="/board-task/{{ $board->id }}">{{ $board['title'] }}</a>
+            </div>
           @endif
+          @empty
+            <p>You haven't created a board yet!</p>
+          @endforelse
         </div>
       </div>
     </div>

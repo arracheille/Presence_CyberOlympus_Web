@@ -1,8 +1,8 @@
 <x-app-layout>
     <div class="board">
-        <h3>Your Boards</h3>
+        <h2>Workspace Boards</h2>
         <p>From workspace <span>{{ $workspace->title }}</span></p>
-        <div class="wrapper">
+        {{-- <div class="wrapper"> --}}
           <div class="board-container">
             @foreach ($workspace->boards as $board)
             @if ($board->visibility === 'private' && $board->user_id === auth()->user()->id)
@@ -18,8 +18,8 @@
                     };
                 @endphp
                 <div class="content-board center" id="{{ $board_color }}">
-                    <a href="/board-task/{{ $board->id }}">
-                    <p>{{ $board['title'] }}</p>
+                    <a href="{{ url('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) }}">
+                        <p>{{ $board['title'] }}</p>
                     </a>
                     <div class="content-board-crud">
                         <button class="board-edit gradient-v-blue" onclick="openEditboard({{ $board->id }})">Edit</button>
@@ -43,8 +43,8 @@
                     };
                 @endphp
                 <div class="content-board center" id="{{ $board_color }}">
-                    <a href="/board-task/{{ $board->id }}">
-                    <p>{{ $board['title'] }}</p>
+                    <a href="{{ url('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) }}">
+                        <p>{{ $board['title'] }}</p>
                     </a>
                     <div class="content-board-crud">
                         <button class="board-edit gradient-v-blue" onclick="openEditboard({{ $board->id }})">Edit</button>
@@ -108,7 +108,7 @@
                 <p><i class="fa-solid fa-plus"></i> Add New Board</p>
               </div>  
             </div>
-        </div>
+        {{-- </div> --}}
         <div id="addboardModal" class="modal">
             <div class="modal-content">
                 <div class="modal-title-close">

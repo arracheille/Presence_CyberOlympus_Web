@@ -11,7 +11,8 @@ class Cover extends Model
 
     protected $fillable = [
         'task_item_id', 
-        'background_color'
+        'background_color',
+        'background_image'
     ];
 
     public function taskitems() {

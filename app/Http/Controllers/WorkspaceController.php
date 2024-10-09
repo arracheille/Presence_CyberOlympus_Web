@@ -26,6 +26,7 @@ class WorkspaceController extends Controller
         $createMember               = new Member();
         $createMember->user_id      = auth()->id();
         $createMember->email        = auth()->user()->email;
+        $createMember->role         = 'admin';
         $createMember->workspace_id = $workspacesId->id;
         $createMember->unique_code  = $workspacesId->unique_code;
         $createMember->save();

@@ -38,7 +38,7 @@ class Schedule extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function taskitems() {
+    public function taskitem() {
         return $this->belongsTo(TaskItem::class, 'task_item_id');
     }
 }

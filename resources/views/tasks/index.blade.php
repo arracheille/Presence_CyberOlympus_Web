@@ -3,7 +3,8 @@
     <div class="task">
         <div class="task-info">
             <div class="task-desc">
-                <h3>{{ $board->title }}</h3>
+                <h2>{{ $board->title }}</h2>
+                <p>From workspace <strong>{{ $board->workspace->title }}</strong></p>
             </div>
             <div class="task-share">
                 <div class="dropdown">
@@ -61,7 +62,7 @@
                             <h4>Board Visibility</h4>
                             <span class="close">&times;</span>
                         </div>
-                        <form action="{{ url('/edit-visibility/' . Request::segment(2))}}" method="POST">
+                        <form action="{{ url('/edit-visibility/' . Request::segment(4))}}" method="POST">
                             @csrf
                             @method('PUT')
                             <select name="visibility" id="visibility">
@@ -76,7 +77,7 @@
         </div>
         <div class="wrapper" id="to-do-list-container">
             <div class="task-container" id="to-do-body">
-                @foreach ($tasks as $task)
+                @foreach ($board->tasks as $task)
                 @php
                 $task_color = match ($task['background_color']) {
                     'gradient-orange' => 'gradient-orange',
@@ -147,22 +148,32 @@
                                 $cover_color = "darkblue";
                             @endphp
 
-                            @foreach ($taskitem->covers as $cover)
-                            @php
-                            $cover_color = match ($cover['background_color']) {
-                                'gradient-orange' => 'gradient-orange',
-                                'gradient-blue' => 'gradient-blue',
-                                'gradient-green' => 'gradient-green',
-                                'gradient-red' => 'gradient-red',
-                                'gradient-pink' => 'gradient-pink',
-                                'gradient-purple' => 'gradient-purple',
-                                default => 'darkblue',
-                            };
-                            @endphp
-                            @endforeach
-                            
-                            <p id="{{ $cover_color }}">{{ $taskitem->title }}</p>
+                            @if ($taskitem->covers->isEmpty())
+                            @else
+                                @foreach ($taskitem->covers as $cover)
+                                    @php
+                                    $cover_color = match ($cover['background_color']) {
+                                        'gradient-orange' => 'gradient-orange',
+                                        'gradient-blue' => 'gradient-blue',
+                                        'gradient-green' => 'gradient-green',
+                                        'gradient-red' => 'gradient-red',
+                                        'gradient-pink' => 'gradient-pink',
+                                        'gradient-purple' => 'gradient-purple',
+                                        default => 'darkblue',
+                                    };
+                                    @endphp
 
+                                    @if (empty($cover->background_image))
+                                    @else
+                                        <div class="taskitem-background">
+                                            <img src="{{ asset($cover->background_image) }}">
+                                        </div>
+                                    @endif
+                                @endforeach
+                            @endif
+
+                            <p id="{{ $cover_color }}">{{ $taskitem->title }}</p>
+                        
                             @if ($taskitem->labels->isEmpty())
                             @else
                                 <div class="container-task-label">
@@ -193,8 +204,17 @@
                                 $taskitem->checks->whereNotNull('title')->where('title', '!=', '')->first() ||
                                 $taskitem->comments->whereNotNull('comment')->where('comment', '!=', '')->first() ||
                                 $taskitem->schedules->whereNotNull('task_item_id')->where('task_item_id', '!=', '')->first() ||
+                                $taskitem->assigns->whereNotNull('task_item_id')->where('task_item_id', '!=', '')->first() ||
+                                $taskitem->attachments->whereNotNull('link')->where('link', '!=', '')->first() ||
+                                $taskitem->attachments->whereNotNull('link_display')->where('link_display', '!=', '')->first() ||
                                 $taskitem->attachments->whereNotNull('image')->where('image', '!=', '')->first())
                                 <div class="container-task-component">
+                                    
+                                    @if($taskitem->assigns->whereNotNull('task_item_id')->where('task_item_id', '!=', '')->first())
+                                        <div class="content-task-component" id="item-checklist">
+                                            <i class="fa-solid fa-user-tag"></i>
+                                        </div>
+                                    @endif
 
                                     @if(!is_null($taskitem->description) && $taskitem->description !== '')
                                         <div class="content-task-component" id="item-description">
@@ -220,7 +240,9 @@
                                         </div>
                                     @endif
 
-                                    @if($taskitem->attachments->whereNotNull('image')->where('image', '!=', '')->first())
+                                    @if($taskitem->attachments->whereNotNull('image')->where('image', '!=', '')->first() || 
+                                        $taskitem->attachments->whereNotNull('link')->where('link', '!=', '')->first() ||
+                                        $taskitem->attachments->whereNotNull('link_display')->where('link_display', '!=', '')->first())
                                         <div class="content-task-component" id="item-attachment">
                                             <i class="fa-solid fa-paperclip"></i>
                                         </div>
@@ -235,6 +257,7 @@
                                     <h2>Edit Task Item</h2>
                                     <span class="close" onclick="closeEdittaskitem({{ $taskitem->id }})">&times;</span>
                                 </div>
+                                <p>From Task <strong>{{ $taskitem->tasks->title }}</strong></p>
                                 <div class="modal-details">
                                     <div class="modal-details-content">
                                         @if ($taskitem->assigns->isEmpty())
@@ -392,13 +415,10 @@
                                                 </div>
                                                   @if($check->checklists->isNotEmpty())
                                                     @php
-                                                        $totalChecklists = $check->checklists->count();
+                                                        $totalChecklists = $check->checklists->where('check_id' == $check->id)->count();
                                                         $checkedCount = $check->checklists->where('is_checked', true)->count();
                                                     @endphp
                                                     <div class="checklist-progress-container">
-                                                        {{-- <div class="checklist-progress-content">
-                                                            <div class="checklist-progress-bar" style="width: 0%;"></div>
-                                                        </div> --}}
                                                         <p>{{ $checkedCount }} of {{ $totalChecklists }} Checked</p>
                                                     </div>
                                                 @endif
@@ -443,6 +463,9 @@
                                         @else
                                         <h4>Attachments</h4>
                                             @foreach ($taskitem->attachments as $attachment)
+                                            @if (empty($attachment->image))
+                                            
+                                            @else
                                             <div class="attachment-edit-container">
                                                 <div class="dropdown">
                                                     <button class="link"><i class="fa-solid fa-ellipsis-vertical"></i></button>
@@ -462,11 +485,50 @@
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="delete-btn">Delete</button>
-                                                    </form>                        
+                                                      </form>                        
                                                     </div>
                                                   </div>
                                                 <img src="{{ asset($attachment->image) }}">
+                                                <p class="text-small">Image: {{ basename($attachment->image) }}</p>
+
                                             </div>
+                                            @endif
+                                            @if (empty($attachment->link))
+
+                                            @else
+                                            <div class="attachment-link-container">
+                                                <div class="dropdown label-edit attachment">
+                                                    <button class="link">
+                                                        <div class="attachment-link-icon">
+                                                            <i class="fa-solid fa-link"></i>
+                                                        </div>        
+                                                    </button>
+                                                    <div class="dropdown-menu label dropdown-color">
+                                                        <div class="dropdown-title-close">
+                                                          <h4>Edit attachment</h4>
+                                                          <span class="close">&times;</span>
+                                                        </div>
+                                                        {{-- attachment link modal --}}
+                                                        <form action="/attachment-edit/{{ $attachment->id }}" method="POST" enctype="multipart/form-data">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            {{-- <input type="text" name="link" id="link" > --}}
+                                                            <label for="link">Uploaded Link</label>
+                                                            <input type="text" name="link" id="link" value="{{ $attachment->link }}">
+                                                            <label for="link">Display Text</label>
+                                                            <input type="text" name="link_display" id="link_display" value="{{ $attachment->link_display }}">
+                                                            <button type="submit" class="submit-btn">Save</button>      
+                                                        </form>
+                                                        <form action="/attachment-delete/{{ $attachment->id }}" method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="delete-btn">Delete</button>
+                                                        </form>
+                                                      </div>
+                                                </div>
+                                                <a href="{{ $attachment->link }}" class="attachment-link"><p>{{ $attachment->link_display }}</p></a>
+                                            </div>
+                                            @endif
                                             @endforeach
                                         @endif
                                         <form action="/task-item-edit/{{ $taskitem->id }}" method="POST">
@@ -487,7 +549,13 @@
                                                     <img src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->name) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon" alt="Avatar">
                                                     <div class="user-comment">
                                                         <h5>{{ $comment->user->name }}</h5>
-                                                        <p class="comment-result">{{ $comment->comment }}</p>
+                                                        <p class="comment-result" onclick="toggleEdit(this)">{{ $comment->comment }}</p>
+                                                        <form action="/comment-edit/{{ $comment->id }}" method="POST" >
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <textarea name="comment">{{ $comment->comment }}</textarea>
+                                                            <button type="submit">Send</button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -561,27 +629,70 @@
                                                     <h4>Choose Background</h4>
                                                     <span class="close">&times;</span>
                                                 </div>
-                                                <form action="/cover-create" method="POST" class="color-container">
-                                                    @csrf
-                                                    <input type="hidden" name="task_item_id" value="{{ $taskitem->id }}">
-                                                    {{-- <label for="background_image_id">Or Upload A File</label>
-                                                    <input type="file" name="background_image" id="background_image_id"> --}}
-                                                    <div class="grid-color">
-                                                        <input type="radio" id="option-task-item-background-{{ $taskitem->id }}-1" name="background_color" value="gradient-orange" checked/>
-                                                        <label for="option-task-item-background-{{ $taskitem->id }}-1" class="radio-button color" id="gradient-orange"></label>
-                                                        <input type="radio" id="option-task-item-background-{{ $taskitem->id }}-2" name="background_color" value="gradient-red" />
-                                                        <label for="option-task-item-background-{{ $taskitem->id }}-2" class="radio-button color" id="gradient-red"></label>
-                                                        <input type="radio" id="option-task-item-background-{{ $taskitem->id }}-3" name="background_color" value="gradient-blue" />
-                                                        <label for="option-task-item-background-{{ $taskitem->id }}-3" class="radio-button color" id="gradient-blue"></label>
-                                                        <input type="radio" id="option-task-item-background-{{ $taskitem->id }}-4" name="background_color" value="gradient-green" />
-                                                        <label for="option-task-item-background-{{ $taskitem->id }}-4" class="radio-button color" id="gradient-green"></label>
-                                                        <input type="radio" id="option-task-item-background-{{ $taskitem->id }}-5" name="background_color" value="gradient-pink" />
-                                                        <label for="option-task-item-background-{{ $taskitem->id }}-5" class="radio-button color" id="gradient-pink"></label>
-                                                        <input type="radio" id="option-task-item-background-{{ $taskitem->id }}-6" name="background_color" value="gradient-purple" />
-                                                        <label for="option-task-item-background-{{ $taskitem->id }}-6" class="radio-button color" id="gradient-purple"></label>                                    
-                                                    </div>
-                                                    <button type="submit">Save</button>
-                                                </form>
+                                                @if ($taskitem->covers->where('task_item_id', $taskitem->id)->isEmpty())
+                                                    <form action="/cover-create" method="POST" enctype="multipart/form-data" class="color-container">
+                                                        @csrf
+                                                        <input type="hidden" name="task_item_id" value="{{ $taskitem->id }}">
+                                                        <div class="grid-color">
+                                                            <input type="radio" id="option-task-item-background-{{ $taskitem->id }}-1" name="background_color" value="gradient-orange"/>
+                                                            <label for="option-task-item-background-{{ $taskitem->id }}-1" class="radio-button color" id="gradient-orange"></label>
+                                                            <input type="radio" id="option-task-item-background-{{ $taskitem->id }}-2" name="background_color" value="gradient-red" />
+                                                            <label for="option-task-item-background-{{ $taskitem->id }}-2" class="radio-button color" id="gradient-red"></label>
+                                                            <input type="radio" id="option-task-item-background-{{ $taskitem->id }}-3" name="background_color" value="gradient-blue" />
+                                                            <label for="option-task-item-background-{{ $taskitem->id }}-3" class="radio-button color" id="gradient-blue"></label>
+                                                            <input type="radio" id="option-task-item-background-{{ $taskitem->id }}-4" name="background_color" value="gradient-green" />
+                                                            <label for="option-task-item-background-{{ $taskitem->id }}-4" class="radio-button color" id="gradient-green"></label>
+                                                            <input type="radio" id="option-task-item-background-{{ $taskitem->id }}-5" name="background_color" value="gradient-pink" />
+                                                            <label for="option-task-item-background-{{ $taskitem->id }}-5" class="radio-button color" id="gradient-pink"></label>
+                                                            <input type="radio" id="option-task-item-background-{{ $taskitem->id }}-6" name="background_color" value="gradient-purple" />
+                                                            <label for="option-task-item-background-{{ $taskitem->id }}-6" class="radio-button color" id="gradient-purple"></label>
+                                                        </div>
+                                                        <label for="background_image">Or Upload A File</label>
+                                                        <input type="file" name="background_image" id="background_image">
+                                                        <button type="submit">Save</button>
+                                                    </form>
+                                                @else
+                                                    @foreach ($taskitem->covers as $cover)
+                                                    <form action="/cover-edit/{{ $cover->id }}" method="POST" enctype="multipart/form-data" class="color-container">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <input type="hidden" name="task_item_id" value="{{ $taskitem->id }}">
+                                                        <div class="grid-color">
+                                                            <input type="radio" id="option-task-item-cover-{{ $cover->id }}-1" name="background_color" value="gradient-orange"
+                                                                @if($cover->background_color == 'gradient-orange') checked @endif />
+                                                            <label for="option-task-item-cover-{{ $cover->id }}-1" class="radio-button color" id="gradient-orange"></label>
+                                                            
+                                                            <input type="radio" id="option-task-item-cover-{{ $cover->id }}-2" name="background_color" value="gradient-red"
+                                                                @if($cover->background_color == 'gradient-red') checked @endif />
+                                                            <label for="option-task-item-cover-{{ $cover->id }}-2" class="radio-button color" id="gradient-red"></label>
+                                                            
+                                                            <input type="radio" id="option-task-item-cover-{{ $cover->id }}-3" name="background_color" value="gradient-blue"
+                                                                @if($cover->background_color == 'gradient-blue') checked @endif />
+                                                            <label for="option-task-item-cover-{{ $cover->id }}-3" class="radio-button color" id="gradient-blue"></label>
+                                                            
+                                                            <input type="radio" id="option-task-item-cover-{{ $cover->id }}-4" name="background_color" value="gradient-green"
+                                                                @if($cover->background_color == 'gradient-green') checked @endif />
+                                                            <label for="option-task-item-cover-{{ $cover->id }}-4" class="radio-button color" id="gradient-green"></label>
+                                                            
+                                                            <input type="radio" id="option-task-item-cover-{{ $cover->id }}-5" name="background_color" value="gradient-pink"
+                                                                @if($cover->background_color == 'gradient-pink') checked @endif />
+                                                            <label for="option-task-item-cover-{{ $cover->id }}-5" class="radio-button color" id="gradient-pink"></label>
+                                                            
+                                                            <input type="radio" id="option-task-item-cover-{{ $cover->id }}-6" name="background_color" value="gradient-purple"
+                                                                @if($cover->background_color == 'gradient-purple') checked @endif />
+                                                            <label for="option-task-item-cover-{{ $cover->id }}-6" class="radio-button color" id="gradient-purple"></label>
+                                                        </div>
+                                                        <hr>
+                                                        <label for="background_image">Or Upload A File</label>
+                                                        @if (empty($cover->background_image))
+                                                        @else
+                                                        <p class="text-small">Current Image: {{ basename($cover->background_image) }}</p>
+                                                        @endif
+                                                        <input type="file" name="background_image" id="background_image" value="{{ $cover->background_image }}">
+                                                        <button type="submit">Save</button>
+                                                    </form>    
+                                                    @endforeach
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="dropdown">
@@ -592,7 +703,7 @@
                                                     <span class="close">&times;</span>
                                                 </div>
                                                 @if ($taskitem->schedules->where('task_item_id', $taskitem->id)->isEmpty())
-                                                    <form action="/schedule-component-create" method="POST" class="due-date-modal">
+                                                    <form action="/schedule-component-create" method="POST">
                                                         @csrf
                                                         <input type="text" id="title" name="title" value="{{ $taskitem->title }}" style="display: none">
                                                         <input type="hidden" name="workspace_id" value="{{ $taskitem->tasks->board->workspace->id }}">
@@ -600,7 +711,7 @@
                                                         <input type="hidden" value="gradient-blue" name="background_color">
                                                         <input type="datetime-local" id="start-date" name="start" style="display: none">
                                                         <input type="datetime-local" id="end-date" name="end">
-                                                        <button>Save</button>
+                                                        <button type="submit">Save</button>
                                                     </form>
                                                 @else
                                                     @foreach ($taskitem->schedules as $schedule)
@@ -611,7 +722,7 @@
                                                             <input type="hidden" value="gradient-blue" name="background_color">
                                                             <input type="datetime-local" id="start-date" name="start" style="display: none">
                                                             <input type="datetime-local" name="end" value="{{ $schedule->end }}">
-                                                            <button>Submit</button>
+                                                            <button type="submit">Submit</button>
                                                         </form>
                                                     @endforeach
                                                 @endif
@@ -644,6 +755,11 @@
                                                     <input type="hidden" name="task_item_id" value="{{ $taskitem->id }}">
                                                     <label for="image">Upload A File (jpeg, jpg & png)</label>
                                                     <input type="file" name="image" id="image">
+                                                    <hr>
+                                                    <label for="link">Or Upload A Link</label>
+                                                    <input type="text" name="link" id="link">
+                                                    <label for="link">Display Text</label>
+                                                    <input type="text" name="link_display" id="link_display">
                                                     <button>Save</button>
                                                 </form>
                                             </div>
@@ -732,16 +848,6 @@
     @include('components.jquery')
 
     <script>
-        var currentUrl = window.location.href;
-        document.getElementById('share_url').value = currentUrl;
-
-        document.getElementById('clipboard').addEventListener('click', function() {
-            var copyText = document.getElementById('share_url');
-            copyText.select();
-            document.execCommand("copy");
-            toastr.success("URL copied to clipboard!");
-        });
-
         function getLocalDatetimeString(date) {
             var year = date.getFullYear();
             var month = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -753,14 +859,49 @@
         var today = new Date();
         var tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
+        
         var startDateInputs = document.querySelectorAll('input[id^="start-date"]');
         startDateInputs.forEach(function(input) {
             input.value = getLocalDatetimeString(today);
         });
+        
         var endDateInputs = document.querySelectorAll('input[id^="end-date"]');
         endDateInputs.forEach(function(input) {
             input.value = getLocalDatetimeString(tomorrow);
         });
+
+        function toggleEdit(element) {
+            const form = element.nextElementSibling;
+            
+            form.style.display = "flex";
+            element.style.display = "none";
+
+            document.addEventListener('click', function handleClickOutside(event) {
+                if (!form.contains(event.target) && event.target !== element) {
+                    form.style.display = "none";
+                    element.style.display = "block";
+                    document.removeEventListener('click', handleClickOutside);
+                }
+            });
+        }
+
+        // function toggleEdit(element) {
+        //     const form = element.nextElementSibling;
+
+        //     if (form.style.display === "none") {
+        //         form.style.display = "flex";
+        //         element.style.display = "none";
+        //     }
+        // }
+
+        // function cancelEdit(button) {
+        //     const form = button.parentNode;
+        //     const commentResult = form.previousElementSibling;
+
+        //     form.style.display = "none";
+        //     commentResult.style.display = "block";
+        // }
+
         function openAddtask(board_id) {
             document.getElementById('addtaskModal').style.display = 'block';
             document.getElementById('board_id').value = board_id;
@@ -819,7 +960,6 @@
         function checklist(id, checklistTitle) {
             let is_checked = $('#checklist'+id).is(":checked") == true ? 1 : 0;
             let title = encodeURIComponent(checklistTitle);
-
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

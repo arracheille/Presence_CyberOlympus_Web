@@ -49,18 +49,15 @@ class ChecklistController extends Controller
         $dataChecklist = Checklist::find($request->check_id);
     
         if ($dataChecklist) {
-            // Update status checklist
             $dataChecklist->is_checked = $request->is_checked;
             $dataChecklist->save();
     
-            // Hitung ulang jumlah checklist yang dicentang dan total checklist
             $checkedCount = Checklist::where('check_id', $dataChecklist->check_id)
                                     ->where('is_checked', true)
                                     ->count();
             $totalChecklists = Checklist::where('check_id', $dataChecklist->check_id)
                                         ->count();
     
-            // Kirim response JSON
             return response()->json([
                'message' => 'Berhasil simpan',
                'is_checked' => $request->is_checked,

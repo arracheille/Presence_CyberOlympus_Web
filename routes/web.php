@@ -1,9 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AssignController;
 use App\Http\Controllers\AttachmentController;
-use App\Models\Board;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\TaskController;
@@ -19,13 +18,17 @@ use App\Http\Controllers\CoverController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\LabelController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\WorkspaceController;
 use App\Models\Member;
 use App\Models\Schedule;
+use App\Models\Board;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Workspace;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+
 // use App\Http\Middleware\CheckMember;
 
 Route::get('/', function () {
@@ -68,16 +71,13 @@ Route::middleware('auth')->group(function () {
         }
     })->name('workspaces.join-email');
 
-    Route::get('/workspace/{workspace}', function (Workspace $workspace) {
-        return view('workspaces.dashboard', compact('workspace'));
-    })->name('workspaces.dashboard');
-
     Route::post('/workspace/join', function (Request $request) {
         $findWorkspace = Workspace::where('unique_code', $request->unique_code)->first();
         if ($findWorkspace) {
             $insertMember               = new Member;
             $insertMember->user_id      = auth()->user()->id;
             $insertMember->email        = auth()->user()->email;
+            $insertMember->role         = 'member';
             $insertMember->workspace_id = $findWorkspace->id;
             $insertMember->unique_code  = $findWorkspace->unique_code;
             $insertMember->save();
@@ -87,48 +87,29 @@ Route::middleware('auth')->group(function () {
         }
     })->name('workspaces.join');
 
+    Route::get('/workspace/{workspace}', function (Workspace $workspace) {
+        return view('workspaces.dashboard', compact('workspace'));
+    })->name('workspaces.dashboard');
+
     Route::post('/create-workspace', [WorkspaceController::class, 'create']);
     Route::get('/edit-workspace/{workspace}', [WorkspaceController::class, 'edit']);
     Route::put('/edit-workspace/{workspace}', [WorkspaceController::class, 'update']);
     Route::delete('/delete-workspace/{workspace}', [WorkspaceController::class, 'destroy']);
-    
-    Route::get('/members/{workspace}', function (Workspace $workspace) {
-        $members = Member::all();
-        return view('workspaces.member', compact('workspace', 'members'));
-    })->name('workspaces.member');
-
-    Route::get('/boards/{workspace}', function (Workspace $workspace) {
-        $boards = Board::all();
-        return view('boards.index', compact('workspace', 'boards'));
-    })->name('boards.index');    
 
     Route::post('/create-board', [BoardController::class, 'create']);
     Route::get('/edit-board/{board}', [BoardController::class, 'edit']);
     Route::put('/edit-board/{board}', [BoardController::class, 'update']);
     Route::delete('/delete-board/{board}', [BoardController::class, 'destroy']);
+    
+    Route::put('/update-member-role', [MemberController::class, 'updaterole'])->name('member.role-update');
 
     Route::get('/edit-visibility/{board}', [BoardController::class, 'edit']);
     Route::put('/edit-visibility/{board}', [BoardController::class, 'updatevisibility']);
-
-    Route::get('/schedule/{workspace}', function (Workspace $workspace) {
-        $schedules = Schedule::all();
-        return view('schedule.index', compact('workspace', 'schedules'));
-    })->name('schedule.index');    
 
     Route::post('/schedule-create', [ScheduleController::class, 'create']);
     Route::get('/schedule-edit/{schedule}', [ScheduleController::class, 'edit']);
     Route::put('/schedule-edit/{schedule}', [ScheduleController::class, 'update']);
     Route::delete('/schedule-delete/{schedule}', [ScheduleController::class, 'destroy']);
-    
-    Route::get('/board-task/{board}', function ($boardId) {
-        $users = User::all();
-        $schedules = Schedule::all();
-        $board = Board::findOrFail($boardId);
-        $tasks = Task::where('board_id', $boardId)
-                     ->orderBy('position', 'asc')
-                     ->get();
-        return view('tasks.index', compact('tasks', 'board', 'schedules', 'users'));
-    })->name('tasks.index');
 
     Route::post('/task-create', [TaskController::class, 'create']);
     Route::get('/task-edit/{task}', [TaskController::class, 'edit']);
@@ -138,7 +119,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/schedule-component-create', [ScheduleController::class, 'create_due']);
     
     Route::post('/tasks/update-order', [TaskController::class, 'updateOrder'])->name('tasks.updateOrder');
-    Route::post('/task-item-update-position', [TaskItemController::class, 'updatePosition'])->name('taskitemUpdate');
+    Route::post('/task-item-update-position', [TaskItemController:: class, 'updatePosition'])->name('taskitemUpdate');
     
     Route::post('/task-item-create', [TaskItemController::class, 'create']);
     Route::get('/task-item-edit/{taskitem}', [TaskItemController::class, 'edit']);
@@ -151,6 +132,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/label-delete/{label}', [LabelController::class, 'destroy']);
     
     Route::post('/cover-create', [CoverController::class, 'create']);
+    Route::get('/cover-edit/{cover}', [CoverController::class, 'edit']);
+    Route::put('/cover-edit/{cover}', [CoverController::class, 'update']);
     
     Route::post('/check-create', [CheckController::class, 'create']);
     Route::get('/check-edit/{check}', [CheckController::class, 'edit']);
@@ -173,6 +156,51 @@ Route::middleware('auth')->group(function () {
     Route::delete('/assign-delete/{assign}', [AssignController::class, 'destroy']);
     
     Route::post('/comment-create', [CommentController::class, 'create']);
+    Route::get('/comment-edit/{comment}', [CommentController::class, 'edit']);
+    Route::put('/comment-edit/{comment}', [CommentController::class, 'update']);
+    
+    Route::get('/member-edit/{member}', [MemberController::class, 'edit']);
+    Route::put('/member-edit/{member}', [MemberController::class, 'update']);
+    
+    Route::prefix('/workspace/{workspace}')->group(function() {
+        Route::get('/members', function(Workspace $workspace) {
+            $members = Member::all();
+            return view('workspaces.member', compact('workspace','members'));    
+        })->name('members.index');
+        
+        Route::get('/member-details/{member}', function(Workspace $workspace, Member $member) {
+            $members = Member::all();
+            return view('workspaces.member-detail', compact('workspace','members', 'member'));    
+        })->name('members.detail');
+
+        Route::get('/boards', function (Workspace $workspace) {
+            $boards = Board::all();
+            return view('boards.index', compact('workspace', 'boards'));
+        })->name('boards.index');
+        
+        Route::get('/schedule', function (Workspace $workspace) {
+            $schedules = Schedule::all();
+            return view('schedule.index', compact('workspace', 'schedules'));
+        })->name('schedule.index');
+
+        Route::get('/settings', function(Workspace $workspace) {
+            return view('workspaces.settings', compact('workspace'));
+        })->name('workspaces.settings');
+    
+        Route::get('/board-task/{board}', function ($boardId) {
+            $users = User::all();
+            $explodetaskBoardId = explode("board-task/", URL::current());
+            $taskBoardId = $explodetaskBoardId[1];
+            $schedules = Schedule::all();
+            $board = Board::where('id', $taskBoardId)->with('tasks', function ($q) use ($taskBoardId) {
+                $q->where('tasks.board_id', $taskBoardId);
+            })->first();
+            $tasks = Task::where('board_id', $boardId)
+                            ->orderBy('position', 'asc')
+                            ->get();
+            return view('tasks.index', compact('tasks', 'board', 'schedules', 'users'));
+        })->name('tasks.index');
+    });
 });
 
 require __DIR__.'/auth.php';
