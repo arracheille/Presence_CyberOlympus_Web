@@ -1,17 +1,5 @@
 <x-app-layout>
     <div class="member">
-        {{-- <div class="workspace-title">
-            <img src="https://ui-avatars.com/api/?name={{ urlencode($workspace->title) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon" alt="Avatar">
-            <div class="workspace-title-author">
-                <h4>{{ $workspace->title }}</h4>
-                <p>Created by: <span>{{ $workspace->user->name }}</span></p>
-                @if(!is_null($workspace->description) && $workspace->description !== '')
-                <p>{{ $workspace->description }}</p>
-                @endif
-                <p class="text-small">{{ $workspace->type }}</p>
-            </div>
-            
-        </div> --}}
         <div class="workspace-title">
             <div class="member-title">
                 <h2>Workspace Members</h2>

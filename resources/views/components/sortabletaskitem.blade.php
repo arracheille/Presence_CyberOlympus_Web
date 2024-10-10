@@ -11,6 +11,7 @@
                     id: item.getAttribute('data-id'),
                     position: index
                 }));
+
                 fetch('{{ route('taskitemUpdate') }}', {
                     method: 'POST',
                     headers: {
@@ -24,6 +25,14 @@
                     })
                 })
                 .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        console.log('Position updated successfully.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating position:', error);
+                });
             }
         });
     });

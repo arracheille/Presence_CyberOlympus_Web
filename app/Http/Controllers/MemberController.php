@@ -3,24 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
+use App\Models\Workspace;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
 {
-    // public function updaterole(Request $request)
-    // {
-    //     $request->validate([
-    //         'role' => 'required',
-    //         // 'role' => 'required|in:admin,member',
-    //     ]);
-
-    //     $member = Member::findOrFail(auth()->id());
-    //     $member->role = $request->role;
-    //     $member->save();
-
-    //     return response()->json(['message' => 'Role updated successfully.']);
-    // }
-
     public function edit(Member $member) {
         return view('workspaces.member-detail', ['member' => $member]);
     }
@@ -35,4 +22,14 @@ class MemberController extends Controller
         return back();
     }
 
+    public function kick(Member $member, Request $request) {
+        $workspaceId = $request->input('workspace_id');
+        $member->delete();
+        return redirect()->to('/workspace/'.$workspaceId.'/members');
+    }
+
+    public function leave(Member $member) {
+        $member->delete();
+        return redirect()->to('/workspace');
+    }
 }

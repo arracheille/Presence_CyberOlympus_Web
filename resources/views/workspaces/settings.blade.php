@@ -6,10 +6,27 @@
         </div>
     </div>
     @if (Auth::user()->id === $workspace->user_id)
-        <button class="gradient-h-red">Delete Workspace</button>
-        <button class="gradient-h-orange">Leave Workspace</button>
+
+        <form action="/workspace-leave/{{ $member->id }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button class="gradient-h-red" type="submit">Delete Workspace</button>
+        </form>
+
+        <form action="/workspace-leave/{{ $member->id }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button class="gradient-h-orange" type="submit">Leave Workspace</button>
+        </form>
+
     @else
-        <button class="gradient-h-orange">Leave Workspace</button>
+
+        <form action="/workspace-leave/{{ $member->id }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button class="gradient-h-red" type="submit">Leave Workspace</button>
+        </form>
+
     @endif
     <button class="gradient-h-green">View Archieved Data</button>
 </x-app-layout>

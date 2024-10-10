@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
             $insertMember = new Member;
             $insertMember->user_id = auth()->user()->id;
             $insertMember->email = auth()->user()->email;
+            $insertMember->role         = 'member';
             $insertMember->workspace_id = $findWorkspace->id;
             $insertMember->unique_code = $findWorkspace->unique_code;
             $insertMember->save();
@@ -87,6 +88,8 @@ Route::middleware('auth')->group(function () {
         }
     })->name('workspaces.join');
 
+    Route::delete('/workspace-leave/{member}', [MemberController::class, 'leave']);
+
     Route::get('/workspace/{workspace}', function (Workspace $workspace) {
         return view('workspaces.dashboard', compact('workspace'));
     })->name('workspaces.dashboard');
@@ -100,9 +103,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/edit-board/{board}', [BoardController::class, 'edit']);
     Route::put('/edit-board/{board}', [BoardController::class, 'update']);
     Route::delete('/delete-board/{board}', [BoardController::class, 'destroy']);
-    
-    Route::put('/update-member-role', [MemberController::class, 'updaterole'])->name('member.role-update');
 
+    Route::post('favorite/{board}', [BoardController::class, 'favorite'])->name('favorite');
+    Route::post('unfavorite/{board}', [BoardController::class, 'unfavorite'])->name('unfavorite');
+        
+    Route::put('/update-member-role', [MemberController::class, 'updaterole'])->name('member.role-update');
+    
     Route::get('/edit-visibility/{board}', [BoardController::class, 'edit']);
     Route::put('/edit-visibility/{board}', [BoardController::class, 'updatevisibility']);
 
@@ -110,12 +116,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/schedule-edit/{schedule}', [ScheduleController::class, 'edit']);
     Route::put('/schedule-edit/{schedule}', [ScheduleController::class, 'update']);
     Route::delete('/schedule-delete/{schedule}', [ScheduleController::class, 'destroy']);
-
+    
     Route::post('/task-create', [TaskController::class, 'create']);
     Route::get('/task-edit/{task}', [TaskController::class, 'edit']);
     Route::put('/task-edit/{task}', [TaskController::class, 'update']);
     Route::delete('/task-delete/{task}', [TaskController::class, 'destroy']);
     
+    Route::post('task-favorite/{task}', [TaskController::class, 'favorite'])->name('task.favorite');
+    Route::post('task-unfavorite/{task}', [TaskController::class, 'unfavorite'])->name('task.unfavorite');
+        
     Route::post('/schedule-component-create', [ScheduleController::class, 'create_due']);
     
     Route::post('/tasks/update-order', [TaskController::class, 'updateOrder'])->name('tasks.updateOrder');
@@ -126,6 +135,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/task-item-edit/{taskitem}', [TaskItemController::class, 'update']);
     Route::delete('/task-item-delete/{taskitem}', [TaskItemController::class, 'destroy']);
     
+    Route::post('task-item-favorite/{taskitem}', [TaskItemController::class, 'favorite'])->name('task-item.favorite');
+    Route::post('task-item-unfavorite/{taskitem}', [TaskItemController::class, 'unfavorite'])->name('task-item.unfavorite');
+        
     Route::post('/label-create', [LabelController::class, 'create']);
     Route::get('/label-edit/{label}', [LabelController::class, 'edit']);
     Route::put('/label-edit/{label}', [LabelController::class, 'update']);
@@ -161,6 +173,7 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/member-edit/{member}', [MemberController::class, 'edit']);
     Route::put('/member-edit/{member}', [MemberController::class, 'update']);
+    Route::delete('/member-kick/{member}', [MemberController::class, 'kick']);
     
     Route::prefix('/workspace/{workspace}')->group(function() {
         Route::get('/members', function(Workspace $workspace) {
@@ -183,8 +196,8 @@ Route::middleware('auth')->group(function () {
             return view('schedule.index', compact('workspace', 'schedules'));
         })->name('schedule.index');
 
-        Route::get('/settings', function(Workspace $workspace) {
-            return view('workspaces.settings', compact('workspace'));
+        Route::get('/settings', function(Workspace $workspace, Member $member) {
+            return view('workspaces.settings', compact('workspace', 'member'));
         })->name('workspaces.settings');
     
         Route::get('/board-task/{board}', function ($boardId) {
@@ -193,11 +206,11 @@ Route::middleware('auth')->group(function () {
             $taskBoardId = $explodetaskBoardId[1];
             $schedules = Schedule::all();
             $board = Board::where('id', $taskBoardId)->with('tasks', function ($q) use ($taskBoardId) {
-                $q->where('tasks.board_id', $taskBoardId);
+                $q->where('tasks.board_id', $taskBoardId)
+                    ->orderBy('position', 'asc')
+                    ->get();
             })->first();
-            $tasks = Task::where('board_id', $boardId)
-                            ->orderBy('position', 'asc')
-                            ->get();
+            $tasks = Task::all();
             return view('tasks.index', compact('tasks', 'board', 'schedules', 'users'));
         })->name('tasks.index');
     });

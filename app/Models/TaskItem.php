@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -61,5 +62,12 @@ class TaskItem extends Model
 
     public function workspaces() {
         return $this->belongsTo(Workspace::class);
+    }
+
+    public function favorited()
+    {
+        return (bool) Favorite::where('user_id', Auth::id())
+                            ->where('taskitem_id', $this->id)
+                            ->first();
     }
 }

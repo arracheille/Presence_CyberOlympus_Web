@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -53,6 +54,18 @@ class TaskController extends Controller
         }
 
         return response()->json(['status' => 'success']);
+    }
+
+    public function favorite(Task $task)
+    {
+        Auth::user()->favorite_tasks()->attach($task->id);
+        return response()->json(['status' => 'favorited']);
+    }
+    
+    public function unfavorite(Task $task)
+    {
+        Auth::user()->favorite_tasks()->detach($task->id);
+        return response()->json(['status' => 'unfavorited']);
     }
 
     // public function create(Request $request)

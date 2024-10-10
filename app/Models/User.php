@@ -76,4 +76,19 @@ class User extends Authenticatable implements MustVerifyEmail
     public function members() {
         return $this->hasMany(Member::class, 'user_id');
     }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Board::class, 'favorites', 'user_id', 'board_id')->withTimestamps();
+    }
+
+    public function favorite_tasks()
+    {
+        return $this->belongsToMany(Task::class, 'favorite_tasks', 'user_id', 'task_id')->withTimestamps();
+    }
+
+    public function favorite_taskitems()
+    {
+        return $this->belongsToMany(TaskItem::class, 'favorite_taskitems', 'user_id', 'taskitem_id')->withTimestamps();
+    }
 }

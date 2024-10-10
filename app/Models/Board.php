@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Task;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -34,5 +35,12 @@ class Board extends Model
 
     public function tasks() {
         return $this->hasMany(Task::class);
+    }
+
+    public function favorited()
+    {
+        return (bool) Favorite::where('user_id', Auth::id())
+                            ->where('board_id', $this->id)
+                            ->first();
     }
 }

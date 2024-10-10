@@ -1,7 +1,4 @@
 <x-app-layout>
-    <header>
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-    </header>
     <div class="member">
         <h2>Workspace Member Details</h2>
         <div class="workspace-title">
@@ -13,15 +10,38 @@
             <p>Joined At: {{ $member->created_at }}</p>
             <div class="member-role">
                 <p>Role:</p>
-                <form action="/member-edit/{{ $member->id }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <select name="role" id="role">
-                        <option value="admin" {{ $member->role == 'admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="member" {{ $member->role == 'member' ? 'selected' : '' }}>Member</option>
-                    </select>
-                    <button type="submit" class="gradient-h-blue">Change</button>
-                </form>
+                @if ($member->user_id === $workspace->user_id)
+                    <form action="/member-edit/{{ $member->id }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <select name="role" id="role">
+                            <option value="admin" {{ $member->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="member" {{ $member->role == 'member' ? 'selected' : '' }}>Member</option>
+                        </select>
+                        <button type="submit" class="gradient-h-blue">Change</button>
+                    </form>
+                    <form action="/workspace-leave/{{ $member->id }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="gradient-h-red">Leave Workspace</button>
+                    </form>
+                @else
+                    <form action="/member-edit/{{ $member->id }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <select name="role" id="role">
+                            <option value="admin" {{ $member->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="member" {{ $member->role == 'member' ? 'selected' : '' }}>Member</option>
+                        </select>
+                        <button type="submit" class="gradient-h-blue">Change</button>
+                    </form>
+                    <form action="/member-kick/{{ $member->id }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="workspace_id" value="{{ $workspace->id }}">
+                        <button class="gradient-h-red">Kick Member</button>
+                    </form>
+                @endif
             </div>
         </div>
     </div>

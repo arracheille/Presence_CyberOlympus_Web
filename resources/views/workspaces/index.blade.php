@@ -39,6 +39,14 @@
                                 <p class="text-small">{{ $workspace->workspace->type }}</p>
                             </div>
                         </a>
+                        {{-- <form action="{{ route('favorite', $workspace->id) }}" method="POST" class="star-form">
+                            @csrf
+                            <input type="checkbox" id="checkbox-fav" onclick="toggleFavorite(this)" {{ auth()->user()->favorites()->where('board_id', $workspace->id)->exists() ? 'checked' : '' }}>
+                            <label for="checkbox-fav">
+                                <div class="starred"><i class="fa-solid fa-star"></i></div>
+                                <div class="unstar"><i class="fa-regular fa-star"></i></div>
+                            </label>
+                        </form> --}}
                         <div class="task-share workspace">
                             <div class="dropdown">
                                 <button class="link">Share Workspace</button>

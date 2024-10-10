@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('covers', function (Blueprint $table) {
+        Schema::create('favorite_taskitems', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('task_item_id');
-            $table->string('background_color')->nullable();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('taskitem_id')->unsigned();
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('covers');
+        Schema::dropIfExists('favorite_taskitems');
     }
 };

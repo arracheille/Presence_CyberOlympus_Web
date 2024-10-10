@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -31,10 +32,17 @@ class Task extends Model
     }
 
     public function taskitems() {
-        return $this->hasMany(TaskItem::class);
+        return $this->hasMany(TaskItem::class)->orderBy('position', 'asc');
     }
 
     public function assigns() {
         return $this->hasMany(Assign::class, 'task_id');
+    }
+
+    public function favorited()
+    {
+        return (bool) Favorite::where('user_id', Auth::id())
+                                ->where('task_id', $this->id)
+                                ->first();
     }
 }

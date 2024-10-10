@@ -1,7 +1,17 @@
 <div id="editTaskModal-{{ $task->id }}" class="modal">
     <div class="modal-content">
         <div class="modal-title-close">
-            <h2>Edit Task <span>{{ $task->title }}</span></h2>
+            <div class="title-fav">
+                <h2>Edit Task <span>{{ $task->title }}</span></h2>
+                <form action="{{ route('task.favorite', $task->id) }}" method="POST" class="star-form">
+                    @csrf
+                    <input type="checkbox" id="checkbox-task-fav" onclick="toggleFavoriteTask(this)" {{ auth()->user()->favorite_tasks()->where('task_id', $task->id)->exists() ? 'checked' : '' }}>
+                    <label for="checkbox-task-fav">
+                        <div class="starred"><i class="fa-solid fa-star"></i></div>
+                        <div class="unstar"><i class="fa-regular fa-star"></i></div>
+                    </label>
+                </form>
+            </div>
             <span class="close" onclick="closeEdittask({{ $task->id }})">&times;</span>
         </div>
         <form action="/task-edit/{{ $task->id }}" method="POST">

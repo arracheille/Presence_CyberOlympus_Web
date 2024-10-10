@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Board;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BoardController extends Controller
 {
@@ -57,5 +58,17 @@ class BoardController extends Controller
     public function destroy(Board $board) {
         $board->delete();
         return back();
+    }
+
+    public function favorite(Board $board)
+    {
+        Auth::user()->favorites()->attach($board->id);
+        return response()->json(['status' => 'favorited']);
+    }
+    
+    public function unfavorite(Board $board)
+    {
+        Auth::user()->favorites()->detach($board->id);
+        return response()->json(['status' => 'unfavorited']);
     }
 }

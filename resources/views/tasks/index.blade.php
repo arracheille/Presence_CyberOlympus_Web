@@ -7,6 +7,14 @@
                 <p>From workspace <strong>{{ $board->workspace->title }}</strong></p>
             </div>
             <div class="task-share">
+                <form action="{{ route('favorite', $board->id) }}" method="POST" class="star-form">
+                    @csrf
+                    <input type="checkbox" id="checkbox-fav" onclick="toggleFavorite(this)" {{ auth()->user()->favorites()->where('board_id', $board->id)->exists() ? 'checked' : '' }}>
+                    <label for="checkbox-fav">
+                        <div class="starred"><i class="fa-solid fa-star"></i></div>
+                        <div class="unstar"><i class="fa-regular fa-star"></i></div>
+                    </label>
+                </form>
                 <div class="dropdown">
                     <button class="link gradient-h-blue">Filter</button>
                     <div class="dropdown-menu label-modal dropdown-color"">
@@ -14,7 +22,7 @@
                             <h4>Filter Task & Task Item</h4>
                             <span class="close">&times;</span>
                         </div>
-                        <div class="filter-item bytext  color-container">
+                        <div class="filter-item bytext color-container">
                             <h5>Filter by text</h5>
                             <input type="text" name="search" placeholder="Search...">
                         </div>
@@ -137,7 +145,17 @@
                         <div id="editTaskItemModal-{{ $taskitem->id }}" class="modal">
                             <div class="modal-content">
                                 <div class="modal-title-close" id="modal-background">
-                                    <h2>Edit Task Item</h2>
+                                    <div class="title-fav">
+                                        <h2>Edit Task Item</h2>
+                                        <form action="{{ route('task-item.favorite', $taskitem->id) }}" method="POST" class="star-form">
+                                            @csrf
+                                            <input type="checkbox" id="checkbox-task-item-fav" onclick="toggleFavoriteTaskItem(this)" {{ auth()->user()->favorite_taskitems()->where('taskitem_id', $taskitem->id)->exists() ? 'checked' : '' }}>
+                                            <label for="checkbox-task-item-fav">
+                                                <div class="starred"><i class="fa-solid fa-star"></i></div>
+                                                <div class="unstar"><i class="fa-regular fa-star"></i></div>
+                                            </label>
+                                        </form>                        
+                                    </div>
                                     <span class="close" onclick="closeEdittaskitem({{ $taskitem->id }})">&times;</span>
                                 </div>
                                 <p>From Task <strong>{{ $taskitem->tasks->title }}</strong></p>
@@ -226,6 +244,12 @@
     @include('components.dropdownform')
 
     @include('components.jquery')
+
+    @include('scripts.favorite-board')
+
+    @include('scripts.favorite-task')
+
+    @include('scripts.favorite-task-item')
 
     <script>
         function getLocalDatetimeString(date) {
