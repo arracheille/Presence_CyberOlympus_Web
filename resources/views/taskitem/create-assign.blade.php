@@ -10,9 +10,11 @@
             <input type="hidden" name="task_item_id" value="{{ $taskitem->id }}">
             <input type="hidden" name="task_id" value="">
             <select name="user">
-            @foreach($users as $user)
-                <option value="{{ $user->name }}"> {{ $user->name }} </option>
-            @endforeach
+                @foreach ($workspaces as $workspace)
+                    @foreach($workspace->members as $member)
+                        <option value="{{ $member->user->name }}"> {{ $member->user->name }} </option>
+                    @endforeach
+                @endforeach
             </select>
             <button type="submit">Save</button>
         </form>

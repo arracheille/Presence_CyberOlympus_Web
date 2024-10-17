@@ -24,7 +24,7 @@ class Task extends Model
     }
 
     public function board() {
-        return $this->belongsTo(Board::class);
+        return $this->belongsTo(Board::class, 'board_id');
     }
 
     public function user() {
@@ -32,7 +32,7 @@ class Task extends Model
     }
 
     public function taskitems() {
-        return $this->hasMany(TaskItem::class)->orderBy('position', 'asc');
+        return $this->hasMany(TaskItem::class, 'task_id')->orderBy('position', 'asc');
     }
 
     public function assigns() {

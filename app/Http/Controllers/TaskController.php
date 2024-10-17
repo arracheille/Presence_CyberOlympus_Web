@@ -41,7 +41,17 @@ class TaskController extends Controller
     }
 
     public function destroy(Task $task) {
+        if ($task->trashed()) {
+            $task->forceDelete();
+            return back();
+        }
+
         $task->delete();
+        return back();
+    }
+
+    public function restore(Task $task) {
+        $task->restore();
         return back();
     }
 

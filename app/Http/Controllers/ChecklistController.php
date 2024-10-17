@@ -26,24 +26,19 @@ class ChecklistController extends Controller
         return view('tasks.index', ['checklist' => $checklist]);
     }
 
-    // public function update(Checklist $checklist, Request $request) {
-    //     $dataChecklist = Checklist::find($request->check_id);
+    public function title_edit(Checklist $checklist) {
+        return view('tasks.index', ['checklist' => $checklist]);
+    }
 
-    //     if ($dataChecklist) {
-    //         $dataChecklist->is_checked = $request->is_checked;
-    //         $dataChecklist->save();
+    public function title_update(Checklist $checklist, Request $request) {
+        $checklists = $request->validate([
+            'checklist_title' => 'required',
+        ]);
 
-    //         return response()->json([
-    //            'message'     => 'Berhasil simpan',
-    //            'is_checked'  => $request->is_checked
-    //         ]);
-
-    //     } else {
-    //         return response()->json([
-    //           'message' => 'Gagal simpan'
-    //         ]);
-    //     }
-    // }
+        $checklists['checklist_title'] = strip_tags($checklists['checklist_title']);
+        $checklist->update($checklists);
+        return back();
+    }
 
     public function update(Checklist $checklist, Request $request) {
         $dataChecklist = Checklist::find($request->check_id);
@@ -71,22 +66,40 @@ class ChecklistController extends Controller
             ]);
         }
     }
-    
 
     public function destroy(Checklist $checklist) {
         $checklist->delete();
         return back();
-    }    
+    }
+    
+    // public function update(Checklist $checklist, Request $request) {
+    //     $dataChecklist = Checklist::find($request->check_id);
 
-            // $checklists = $request->validate([
-        //     'checklist_title' => 'required|string|max:255',
-        //     'is_checked' => 'required|boolean',
-        // ]);
-        
-        // $checklists['checklist_title'] = strip_tags($checklists['checklist_title']);
-        // $checklists['is_checked'] = $request->is_checked;
-        
-        // $checklist->update($checklists);
+    //     if ($dataChecklist) {
+    //         $dataChecklist->is_checked = $request->is_checked;
+    //         $dataChecklist->save();
 
-        // return back()->with('board', $request->board_id);
+    //         return response()->json([
+    //            'message'     => 'Berhasil simpan',
+    //            'is_checked'  => $request->is_checked
+    //         ]);
+
+    //     } else {
+    //         return response()->json([
+    //           'message' => 'Gagal simpan'
+    //         ]);
+    //     }
+    // }
+
+    // $checklists = $request->validate([
+    //     'checklist_title' => 'required|string|max:255',
+    //     'is_checked' => 'required|boolean',
+    // ]);
+    
+    // $checklists['checklist_title'] = strip_tags($checklists['checklist_title']);
+    // $checklists['is_checked'] = $request->is_checked;
+    
+    // $checklist->update($checklists);
+
+    // return back()->with('board', $request->board_id);
 }

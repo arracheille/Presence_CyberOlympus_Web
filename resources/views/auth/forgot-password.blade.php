@@ -13,7 +13,7 @@
                     <div class="text-guest">
                         <h2>Forgot Password</h2>
                         {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-                    </div>    
+                    </div>
             
                     <!-- Email Address -->
                     <x-text-input id="email" type="email" name="email" :value="old('email')" placeholder="Enter your email" required autofocus />

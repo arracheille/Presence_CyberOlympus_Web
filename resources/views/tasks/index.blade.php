@@ -149,8 +149,8 @@
                                         <h2>Edit Task Item</h2>
                                         <form action="{{ route('task-item.favorite', $taskitem->id) }}" method="POST" class="star-form">
                                             @csrf
-                                            <input type="checkbox" id="checkbox-task-item-fav" onclick="toggleFavoriteTaskItem(this)" {{ auth()->user()->favorite_taskitems()->where('taskitem_id', $taskitem->id)->exists() ? 'checked' : '' }}>
-                                            <label for="checkbox-task-item-fav">
+                                            <input type="checkbox" id="checkbox-task-item-fav-{{ $taskitem->id }}" data-task-item-id="{{ $taskitem->id }}" onclick="toggleFavoriteTaskItem(this)" {{ auth()->user()->favorite_taskitems()->where('task_item_id', $taskitem->id)->exists() ? 'checked' : '' }}>
+                                            <label for="checkbox-task-item-fav-{{ $taskitem->id }}">
                                                 <div class="starred"><i class="fa-solid fa-star"></i></div>
                                                 <div class="unstar"><i class="fa-regular fa-star"></i></div>
                                             </label>
@@ -158,19 +158,30 @@
                                     </div>
                                     <span class="close" onclick="closeEdittaskitem({{ $taskitem->id }})">&times;</span>
                                 </div>
-                                <p>From Task <strong>{{ $taskitem->tasks->title }}</strong></p>
                                 <div class="modal-details">
                                     <div class="modal-details-content">
-                                        @if ($taskitem->assigns->isEmpty())
-                                            
-                                        @else
-                                            <div class="modal-details-assign">
-                                            <p>
-                                                This Task Item is Assigned to 
-                                                <span>{{ $taskitem->assigns->pluck('user')->implode(', ') }}</span>
-                                            </p>
+                                        <div class="modal-details-assign">
+                                            <p>From Task <strong>{{ $taskitem->tasks->title }}</strong></p>
+                                            @if ($taskitem->assigns->isEmpty())
+                                            @else
+                                                <p>
+                                                    This Task Item is Assigned to 
+                                                    <span>{{ $taskitem->assigns->pluck('user')->implode(', ') }}</span>
+                                                </p>
+                                            @endif
+                                                
+                                            @if ($taskitem->taskitem_members->isEmpty())
+                                            @else
+                                            <div class="taskitem-member-lists">
+                                                <p>Members</p>    
+                                                <div class="modal-details-members-icon">
+                                                    @foreach ($taskitem->taskitem_members as $taskitem_member)
+                                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($taskitem_member->user->name) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon-small" alt="Avatar">
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                            @endif
                                         </div>
-                                        @endif
                                         
                                         @include('taskitem.view-edit-label')
                                         
@@ -193,6 +204,10 @@
                                         
                                         @include('taskitem.create-edit-comment')
 
+                                        @include('taskitem.view-logs')
+
+                                    </div>
+
                                         <div class="modal-detail-buttons">
 
                                             @include('taskitem.create-assign')
@@ -210,8 +225,24 @@
                                             <form id="delete-form-{{ $taskitem->id }}" action="/task-item-delete/{{ $taskitem->id }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="delete-btn" onclick="confirmDelete('delete-form-{{ $taskitem->id }}')">Delete</button>
+                                                <button type="button" class="delete-btn" onclick="confirmDelete('delete-form-{{ $taskitem->id }}')">Archive</button>
                                             </form>
+
+                                            <hr>
+
+                                            @forelse ($taskitem->taskitem_members->where('user_id', auth()->user()->id) as $taskitem_member)
+                                                <form action="/taskitem-member-leave/{{ $taskitem_member->id }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="delete-btn">Leave</button>
+                                                </form>
+                                            @empty
+                                                <form action="/taskitem-member-create" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="task_item_id" value="{{ $taskitem->id }}">
+                                                    <button>Join</button>
+                                                </form>
+                                            @endforelse
                                         </div>
                                     </div>
                                 </div>
@@ -224,18 +255,16 @@
                         </button>
                     </div>
                     @endforeach
-                    <div class="content-task add-task" onclick="openAddtask({{ Request::segment(2) }})">
+                    <div class="content-task add-task" onclick="openAddtask({{ Request::segment(4) }})">
                         <p><i class="fa-solid fa-plus"></i> Add New task</p>
                     </div>
                 </div>
-            </div>    
+            </div>
         </div>
 
     @include('modals.task-taskitem.add-task')
     
     @include('modals.task-taskitem.add-task-item')
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.3/Sortable.min.js" integrity="sha512-8AwTn2Tax8NWI+SqsYAXiKT8jO11WUBzTEWRoilYgr5GWnF4fNqBRD+hCr4JRSA1eZ/qwbI+FPsM3X/PQeHgpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     @include('components.sortabletaskitem')
 
@@ -251,6 +280,8 @@
 
     @include('scripts.favorite-task-item')
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.3/Sortable.min.js" integrity="sha512-8AwTn2Tax8NWI+SqsYAXiKT8jO11WUBzTEWRoilYgr5GWnF4fNqBRD+hCr4JRSA1eZ/qwbI+FPsM3X/PQeHgpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
         function getLocalDatetimeString(date) {
             var year = date.getFullYear();
@@ -260,6 +291,7 @@
             var minutes = "00";
             return `${year}-${month}-${day}T${hours}:${minutes}`;
         }
+        
         var today = new Date();
         var tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
@@ -287,6 +319,50 @@
                     document.removeEventListener('click', handleClickOutside);
                 }
             });
+        }
+
+        function toggleEditCheck(element) {
+            const form = element.nextElementSibling;
+            
+            form.style.display = "flex";
+            element.style.display = "none";
+
+            document.addEventListener('click', function handleClickOutside(event) {
+                if (!form.contains(event.target) && event.target !== element) {
+                    form.style.display = "none";
+                    element.style.display = "block";
+                    document.removeEventListener('click', handleClickOutside);
+                }
+            });
+        }
+
+        function ToggleFormEditChecklist(id) {
+            // document.getElementById('edit-checklist-form' + id).style.display = 'flex';
+            // document.getElementById('checklist-item-check' + id).style.display = 'none';
+
+            const form = document.getElementById('edit-checklist-form' + id);
+            const checklistItem = document.getElementById('checklist-item-check' + id);
+
+            console.log('Form:', form); // Debugging: Pastikan form ditemukan
+            console.log('Checklist Item:', checklistItem); // Debugging: Pastikan checklist item ditemukan
+
+            // Tampilkan form edit dan sembunyikan item checklist
+            if (form && checklistItem) {
+                form.style.display = 'flex'; // Pastikan style-nya diubah ke flex
+                checklistItem.style.display = 'none';
+
+                // Tambahkan event listener untuk mendeteksi klik di luar form
+                document.addEventListener('click', function handleClickOutside(event) {
+                    if (!form.contains(event.target) && !event.target.closest('button')) {
+                        // Jika klik di luar form dan tombol, sembunyikan form
+                        form.style.display = 'none';
+                        checklistItem.style.display = 'block';
+
+                        // Hapus event listener setelah form disembunyikan
+                        document.removeEventListener('click', handleClickOutside);
+                    }
+                });
+            }
         }
 
         function openAddtask(board_id) {

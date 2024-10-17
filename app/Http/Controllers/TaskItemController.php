@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LogTaskitem;
 use App\Models\TaskItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +22,12 @@ class TaskItemController extends Controller
         $taskItem->title = $request->title;
         $taskItem->position = is_null($lastPosition) ? 0 : $lastPosition + 1;
         $taskItem->save();
+
+        $logtaskitem = new LogTaskitem();
+        $logtaskitem->user_id = Auth::id();
+        $logtaskitem->task_item_id = $taskItem->id;
+        $logtaskitem->action = 'created';
+        $logtaskitem->save();
         
         return back()->with('board', $request->board_id);
     }
@@ -41,11 +48,21 @@ class TaskItemController extends Controller
         return back()->with('board', $request->board_id);
     }
 
-    public function destroy(TaskItem $taskitem) {
+    public function destroy(Taskitem $taskitem) {
+        if ($taskitem->trashed()) {
+            $taskitem->forceDelete();
+            return back();
+        }
+
         $taskitem->delete();
         return back();
     }
 
+    public function restore(Taskitem $taskitem) {
+        $taskitem->restore();
+        return back();
+    }
+    
     public function updatePosition(Request $request)
     {
         $request->validate([

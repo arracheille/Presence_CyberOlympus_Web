@@ -56,7 +56,17 @@ class BoardController extends Controller
     }
 
     public function destroy(Board $board) {
+        if ($board->trashed()) {
+            $board->forceDelete();
+            return back();
+        }
+
         $board->delete();
+        return back();
+    }
+
+    public function restore(Board $board) {
+        $board->restore();
         return back();
     }
 

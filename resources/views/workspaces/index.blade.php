@@ -88,7 +88,7 @@
                                     };
                                 @endphp
                                 <div class="content-board center" id="{{ $board_color }}">
-                                    <a href="/board-task/{{ $board->id }}">
+                                    <a href="{{ url('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) }}">
                                     <p>{{ $board['title'] }}</p>
                                     </a>
                                     <div class="content-board-crud">
@@ -113,7 +113,7 @@
                                     };
                                 @endphp
                                 <div class="content-board center" id="{{ $board_color }}">
-                                    <a href="/board-task/{{ $board->id }}">
+                                    <a href="{{ url('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) }}">
                                     <p>{{ $board['title'] }}</p>
                                     </a>
                                     <div class="content-board-crud">

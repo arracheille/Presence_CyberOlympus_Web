@@ -17,7 +17,6 @@ class CodeController extends Controller
             $message = 'Click this button to join the workspace: ';
             $subject = 'Workspace Invitation';
             Mail::to($toEmail)->send(new SendCode($message, $subject, $findWorkspace));
-            // Mail::to($toEmail)->send(new SendCode($message, $subject));
             return redirect()->back()->with('success', 'Invitation sent successfully!');
         } else {
             return redirect()->back()->with('error', 'Workspace not found!');

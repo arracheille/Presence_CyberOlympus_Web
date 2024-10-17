@@ -55,7 +55,7 @@
             <form action="/schedule-delete/{{ $schedule->id }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="delete-btn">Delete</button>
+                <button type="submit" class="delete-btn">Archive</button>
             </form>
         </div>
     </div>
@@ -113,6 +113,5 @@
         function closeEditschedule(id) {
             document.getElementById('editscheduleModal-' + id).style.display = 'none';
         }
-
     </script>
 </x-app-layout>    

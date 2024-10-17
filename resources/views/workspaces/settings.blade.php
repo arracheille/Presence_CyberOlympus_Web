@@ -7,10 +7,10 @@
     </div>
     @if (Auth::user()->id === $workspace->user_id)
 
-        <form action="/workspace-leave/{{ $member->id }}" method="POST">
+        <form action="/delete-workspace/{{ $workspace->id }}" method="POST">
             @csrf
             @method('DELETE')
-            <button class="gradient-h-red" type="submit">Delete Workspace</button>
+            <button class="gradient-h-red" type="submit">Archive Workspace</button>
         </form>
 
         <form action="/workspace-leave/{{ $member->id }}" method="POST">
@@ -28,5 +28,7 @@
         </form>
 
     @endif
-    <button class="gradient-h-green">View Archieved Data</button>
+    <button class="gradient-h-green">
+        <a href="{{ url('/workspace' . '/' . $workspace->id . '/archive') }}">Workspace Archived Data</a>
+    </button>
 </x-app-layout>

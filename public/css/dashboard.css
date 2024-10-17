@@ -338,7 +338,7 @@
     align-items: center;
     gap: var(--size-xs);
 }
-.modal-content form.star-form{
+.modal-content form.star-form {
     flex-direction: row;
     gap: 0;
 }
@@ -400,7 +400,8 @@ input:valid.input-join,
     background-color: transparent;
 }
 .board-container,
-.task-container {
+.task-container,
+.archived-task-item-container {
     display: inline-flex;
     gap: var(--size-m);
     align-items: flex-start;
@@ -422,6 +423,15 @@ input:valid.input-join,
     display: flex;
     flex-direction: column;
     gap: var(--size-xs);
+}
+.archived-task-item-container {
+    background: var(--blue);
+    padding: var(--size-m);
+    width: 100%;
+}
+.archived-task-item-container .content-task-item {
+    width: 15vw;
+    text-align: center;
 }
 .content-task-item {
     display: flex;
@@ -469,7 +479,9 @@ input:valid.input-join,
 }
 .content-task-label,
 .hashtag-label-container .dropdown button.link,
-.modal-details-checklist .dropdown button.link {
+.modal-details-checklist .dropdown button.link,
+form.row-form button,
+.checklist-button-edit {
     padding: 3px var(--size-s);
     border-radius: var(--border-container);
 }
@@ -477,9 +489,13 @@ input:valid.input-join,
 .content-task-component {
     flex: 0 1 auto;
 }
+/* .content-task-component span i.fa-solid.fa-clock{
+    color: var(--red-horizontal);
+} */
 .content-task-label p,
 .hashtag-label-container .dropdown button.link,
-.modal-details-checklist .dropdown button.link {
+.modal-details-checklist .dropdown button.link,
+.checklist-button-edit {
     font-size: 12px;
 }
 /* attendance */
@@ -586,6 +602,9 @@ input:valid.input-join,
     border-radius: var(--border-container);
     background: var(--blue);
 }
+.modal-content form input#overdue {
+    background: var(--red-horizontal);
+}
 .modal-content form button {
     background-color: var(--blue);
     margin-left: auto;
@@ -643,7 +662,8 @@ input:valid.input-join,
     gap: var(--size-s);
     width: 100%;
 }
-.user-comment form {
+.user-comment form,
+form.row-form {
     display: none;
 }
 .user-comment {
@@ -660,6 +680,17 @@ input:valid.input-join,
     width: 100%;
     box-sizing: border-box;
 }
+.modal-details-assign {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-xs);
+    align-items: start;
+    justify-content: start;
+}
+.modal-details-members-icon {
+    display: flex;
+    gap: 5px;
+}
 .modal-details-checklist,
 .modal-details-label {
     display: flex;
@@ -670,6 +701,15 @@ input:valid.input-join,
     background-color: var(--blue);
     border-radius: var(--border-container);
     padding: var(--size-s);
+}
+form.row-form {
+    flex-direction: row;
+    justify-content: space-between;
+}
+form.row-form input {
+    padding: 5px;
+    background: var(--darkblue);
+    width: 100%;
 }
 .checklist-progress-container {
     display: flex;
@@ -743,6 +783,31 @@ input:valid.input-join,
     align-items: center;
     justify-content: space-between;
 }
+.delete-assign {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+/* form
+button
+checklist-button-edit
+dropdown checklist-edit */
+.delete-assign.checklist-content-items form.delete-check-item,
+.delete-assign.checklist-content-items button.checklist-button-edit,
+.delete-assign.checklist-content-items .dropdown.checklist-edit {
+    opacity: 0;
+}
+.checklist-items-content:hover
+    .delete-assign.checklist-content-items
+    form.delete-check-item,
+.checklist-items-content:hover
+    .delete-assign.checklist-content-items
+    button.checklist-button-edit,
+.checklist-items-content:hover
+    .delete-assign.checklist-content-items
+    .dropdown.checklist-edit {
+    opacity: 1;
+}
 .checkbox-item-input input:focus ~ .check {
     box-shadow: 0 0 0 4px var(--white-30);
 }
@@ -803,7 +868,8 @@ a.attachment-link:hover p {
     pointer-events: auto;
     transform: translateY(0);
 }
-.dropdown-menu.label.dropdown-color {
+.dropdown-menu.label.dropdown-color,
+.dropdown-menu.checklist {
     left: 0;
 }
 .dropdown.label-edit button.link {
@@ -822,6 +888,16 @@ a.attachment-link:hover p {
 .hashtag-label-container .dropdown button.link,
 .modal-details-checklist .dropdown button.link {
     background: var(--blue-horizontal);
+}
+.modal-details-checklist .checklist-edit,
+.checklist-title-assign {
+    display: flex;
+    justify-content: space-between;
+}
+.dropdown.checklist-edit button.link,
+.dropdown.check-edit button.link,
+.checklist-button-edit {
+    padding: 3px 9px;
 }
 .dropdown-color {
     display: flex;
@@ -871,4 +947,46 @@ input[type="radio"]:checked + .radio-button {
     display: flex;
     align-items: center;
     gap: var(--size-xs);
+}
+.restore-delete {
+    display: flex;
+    gap: var(--size-xs);
+    align-items: center;
+    margin-top: var(--size-xs);
+}
+.content-task .restore-delete {
+    justify-content: center;
+    align-items: center;
+}
+.modal.schedule-res-del .modal-content form button {
+    margin-left: 0;
+    width: 100%;
+}
+.container-member-component {
+    width: 100%;
+}
+.taskitem-member-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: flex-end;
+}
+.taskitem-member-lists {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.taskitem-member-content {
+    position: relative;
+    padding-right: var(--size-xs);
+}
+.taskitem-member-content span {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+.log-content{
+    display: flex;
+    gap: 4px;
+    align-items: center;
 }

@@ -77,6 +77,22 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Member::class, 'user_id');
     }
 
+    public function taskitem_member() {
+        return $this->hasMany(TaskitemMember::class, 'user_id');
+    }
+
+    public function assign_check() {
+        return $this->hasMany(AssignCheck::class, 'user_id');
+    }
+
+    public function assign_checklist() {
+        return $this->hasMany(AssignChecklist::class, 'user_id');
+    }
+
+    public function logs() {
+        return $this->hasMany(LogTaskitem::class, 'user_id');
+    }
+
     public function favorites()
     {
         return $this->belongsToMany(Board::class, 'favorites', 'user_id', 'board_id')->withTimestamps();
@@ -89,6 +105,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function favorite_taskitems()
     {
-        return $this->belongsToMany(TaskItem::class, 'favorite_taskitems', 'user_id', 'taskitem_id')->withTimestamps();
+        return $this->belongsToMany(TaskItem::class, 'favorite_taskitems', 'user_id', 'task_item_id')->withTimestamps();
     }
 }

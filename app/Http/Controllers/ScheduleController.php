@@ -86,8 +86,23 @@ class ScheduleController extends Controller
     }
 
     public function destroy(Schedule $schedule) {
+        if ($schedule->trashed()) {
+            $schedule->forceDelete();
+            return back();
+        }
+
         $schedule->delete();
         return back();
-        // return redirect('/schedule')->with('success', 'Deleted successfully');
     }
+
+    public function restore(Schedule $schedule) {
+        $schedule->restore();
+        return back();
+    }
+
+    // public function destroy(Schedule $schedule) {
+    //     $schedule->delete();
+    //     return back();
+    //     // return redirect('/schedule')->with('success', 'Deleted successfully');
+    // }
 }

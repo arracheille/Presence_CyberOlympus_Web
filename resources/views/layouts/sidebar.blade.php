@@ -40,7 +40,7 @@
   <ul>
     @foreach ($workspaces as $workspace)
     <li>
-      <a href="{{ url('/workspace' . '/' . $workspace->id . '/members') }}" class="{{ request()->is('/workspace' . '/' . $workspace->id . '/members') ? 'active' : '' }}">
+      <a href="{{ url('/workspace' . '/' . $workspace->id . '/members') }}" class="{{ request()->is('workspace' . '/' . $workspace->id . '/members') ? 'active' : '' }}">
         <i class="fa-solid fa-user"></i>
         <h4>{{ __('Members') }}</h4>
       </a>
@@ -50,7 +50,7 @@
   <ul>
   @foreach ($workspaces as $workspace)
     <li class="list-data">
-      <a href="{{ url('/workspace' . '/' . $workspace->id . '/boards') }}" class="{{ request()->is('/workspace' . '/' . $workspace->id . '/boards') ? 'active' : '' }}">
+      <a href="{{ url('/workspace' . '/' . $workspace->id . '/boards') }}" class="{{ request()->is('workspace' . '/' . $workspace->id . '/boards') ? 'active' : '' }}">
         <i class="fa-solid fa-tachograph-digital"></i>
         <h4>{{ __('Board') }}</h4>
       </a>
@@ -70,7 +70,7 @@
       @endphp
       <li class="subdata">
         <a href="{{ url('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) }}" id="{{ $board_color }}"
-          class="{{ request()->is('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) ? 'active' : '' }}">
+          class="{{ request()->is('workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) ? 'active' : '' }}">
           <p>{{ $board->title }}</p>
         </a>
       </li>
@@ -88,7 +88,7 @@
       @endphp
       <li class="subdata">
         <a href="{{ url('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) }}" id="{{ $board_color }}"
-          class="{{ request()->is('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) ? 'active' : '' }}">
+          class="{{ request()->is('workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) ? 'active' : '' }}">
           <p>{{ $board->title }}</p>
         </a>
       </li>
@@ -106,7 +106,7 @@
   <ul>
     @foreach ($workspaces as $workspace)
     <li>
-      <a href="{{ url('/workspace' . '/' . $workspace->id . '/schedule') }}" class="{{ request()->is('/workspace' . '/' . $workspace->id . '/schedule') ? 'active' : '' }}">
+      <a href="{{ url('/workspace' . '/' . $workspace->id . '/schedule') }}" class="{{ request()->is('workspace' . '/' . $workspace->id . '/schedule') ? 'active' : '' }}">
         <i class="fa-solid fa-calendar-days"></i>
         <h4>{{ __('Schedule') }}</h4>
       </a>
@@ -124,7 +124,7 @@
   <ul>
     @foreach ($workspaces as $workspace)
     <li>
-      <a href="{{ url('/workspace' . '/' . $workspace->id . '/settings') }}" class="{{ request()->is('/workspace' . '/' . $workspace->id . '/settings') ? 'active' : '' }}">
+      <a href="{{ url('/workspace' . '/' . $workspace->id . '/settings') }}" class="{{ request()->is('workspace' . '/' . $workspace->id . '/settings') ? 'active' : '' }}">
         <i class="fa-solid fa-gears"></i>
         <h4>{{ __('Settings') }}</h4>
       </a>
@@ -215,6 +215,14 @@
       </li>
     </ul>
     @endif
+    <ul>
+      <li>
+        <a href="{{ route('user.archive') }}" class="{{ request()->is('user-archive') ? 'active' : '' }}">
+          <i class="fa-solid fa-box-open"></i>
+          <h4>{{ __('Archived') }}</h4>
+        </a>
+      </li>
+    </ul>
     <ul>
       <li>
         <a href="{{ route('profile.edit') }}" class="{{ request()->is('profile') ? 'active' : '' }}">

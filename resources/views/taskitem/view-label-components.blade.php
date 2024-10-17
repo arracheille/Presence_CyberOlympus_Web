@@ -28,17 +28,11 @@
     $taskitem->checks->whereNotNull('title')->where('title', '!=', '')->first() ||
     $taskitem->comments->whereNotNull('comment')->where('comment', '!=', '')->first() ||
     $taskitem->schedules->whereNotNull('task_item_id')->where('task_item_id', '!=', '')->first() ||
-    $taskitem->assigns->whereNotNull('task_item_id')->where('task_item_id', '!=', '')->first() ||
+    $taskitem->taskitem_members->whereNotNull('task_item_id')->where('task_item_id', '!=', '')->first() ||
     $taskitem->attachments->whereNotNull('link')->where('link', '!=', '')->first() ||
     $taskitem->attachments->whereNotNull('link_display')->where('link_display', '!=', '')->first() ||
     $taskitem->attachments->whereNotNull('image')->where('image', '!=', '')->first())
     <div class="container-task-component">
-        
-        @if($taskitem->assigns->whereNotNull('task_item_id')->where('task_item_id', '!=', '')->first())
-            <div class="content-task-component" id="item-checklist">
-                <i class="fa-solid fa-user-tag"></i>
-            </div>
-        @endif
 
         @if(!is_null($taskitem->description) && $taskitem->description !== '')
             <div class="content-task-component" id="item-description">
@@ -48,29 +42,59 @@
 
         @if($taskitem->checks->whereNotNull('title')->where('title', '!=', '')->first())
             <div class="content-task-component" id="item-checklist">
-                <i class="fa-solid fa-square-check"></i>
+                <span><i class="fa-solid fa-square-check"></i> {{ $taskitem->checks->count() }}</span>
             </div>
         @endif
 
         @if($taskitem->comments->whereNotNull('comment')->where('comment', '!=', '')->first())
             <div class="content-task-component" id="item-comment">
-                <i class="fa-solid fa-comments"></i>
+                <span><i class="fa-solid fa-comments"></i> {{ $taskitem->comments->count() }}</span>
             </div>
         @endif
 
-        @if($taskitem->schedules->whereNotNull('task_item_id')->where('task_item_id', '!=', '')->first())
-            <div class="content-task-component" id="item-due-date">
-                <i class="fa-solid fa-clock"></i>
-            </div>
-        @endif
+        @php
+            $attachmentCount = $taskitem->attachments->filter(function($attachment) {
+                return !empty($attachment->image) || !empty($attachment->link) || !empty($attachment->link_display);
+            })->count();
+        @endphp
 
         @if($taskitem->attachments->whereNotNull('image')->where('image', '!=', '')->first() || 
             $taskitem->attachments->whereNotNull('link')->where('link', '!=', '')->first() ||
             $taskitem->attachments->whereNotNull('link_display')->where('link_display', '!=', '')->first())
             <div class="content-task-component" id="item-attachment">
-                <i class="fa-solid fa-paperclip"></i>
+                <span><i class="fa-solid fa-paperclip"></i> {{ $attachmentCount }}</span>
             </div>
         @endif
 
+        @if($taskitem->schedules->whereNotNull('task_item_id')->where('task_item_id', '!=', '')->first())
+            <div class="content-task-component" id="item-due-date">
+                @if (\Carbon\Carbon::parse($taskitem->schedules->first()->end)->lt(\Carbon\Carbon::now()))
+                <span class="gradient-text-red"><i class="fa-solid fa-clock"></i> !</span>
+                @else
+                <i class="fa-solid fa-clock"></i>
+                @endif
+            </div>
+        @endif
+    </div>
+
+    <div class="container-assign-component">
+        <div class="taskitem-member-container">
+            @if($taskitem->assigns->whereNotNull('task_item_id')->where('task_item_id', '!=', '')->first())
+                @foreach ($taskitem->assigns as $assign)
+                    <div class="taskitem-member-content">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($assign->user) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon-smaller" alt="Avatar">
+                        <span><i class="fa-solid fa-at"></i></span>
+                    </div>
+                @endforeach
+            @endif
+            @if($taskitem->taskitem_members->whereNotNull('user_id')->where('user_id', '!=', '')->first())
+                @foreach ($taskitem->taskitem_members as $taskitem_member)
+                    <div class="taskitem-member-content">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($taskitem_member->user->name) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon-smaller" alt="Avatar">
+                        <span><i class="fa-solid fa-address-book"></i></span>
+                    </div>
+                @endforeach
+            @endif
+        </div>
     </div>
 @endif

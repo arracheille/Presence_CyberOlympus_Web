@@ -60,7 +60,7 @@
                 <form action="/label-delete/{{ $label->id }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="delete-btn">Delete</button>
+                    <button type="submit" class="delete-btn">Archive</button>
                 </form>
               </div>
         </div>

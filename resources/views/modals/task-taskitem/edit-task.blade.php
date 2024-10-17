@@ -5,8 +5,9 @@
                 <h2>Edit Task <span>{{ $task->title }}</span></h2>
                 <form action="{{ route('task.favorite', $task->id) }}" method="POST" class="star-form">
                     @csrf
-                    <input type="checkbox" id="checkbox-task-fav" onclick="toggleFavoriteTask(this)" {{ auth()->user()->favorite_tasks()->where('task_id', $task->id)->exists() ? 'checked' : '' }}>
-                    <label for="checkbox-task-fav">
+                    <input type="checkbox" id="checkbox-task-fav-{{ $task->id }}" data-task-id="{{ $task->id }}" onclick="toggleFavoriteTask(this)" {{ auth()->user()->favorite_tasks()->where('task_id', $task->id)->exists() ? 'checked' : '' }}>
+                    {{-- <input type="checkbox" id="checkbox-task-fav" onclick="toggleFavoriteTask(this)" {{ auth()->user()->favorite_tasks()->where('task_id', $task->id)->exists() ? 'checked' : '' }}> --}}
+                    <label for="checkbox-task-fav-{{ $task->id }}">
                         <div class="starred"><i class="fa-solid fa-star"></i></div>
                         <div class="unstar"><i class="fa-regular fa-star"></i></div>
                     </label>
@@ -50,7 +51,7 @@
         <form action="/task-delete/{{ $task->id }}" method="POST">
             @csrf
             @method('DELETE')
-            <button type="submit" class="delete-btn">Delete</button>
+            <button type="submit" class="delete-btn">Archive</button>
         </form>
     </div>
 </div>

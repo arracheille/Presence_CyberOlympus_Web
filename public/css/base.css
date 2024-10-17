@@ -208,6 +208,9 @@ img.icon{
 img.icon-small{
     height: var(--size-l);
 }
+img.icon-smaller{
+    height: 25px;
+}
 form {
     display: flex;
     flex-direction: column;

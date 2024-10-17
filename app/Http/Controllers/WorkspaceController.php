@@ -53,7 +53,26 @@ class WorkspaceController extends Controller
     }
 
     public function destroy(Workspace $workspace) {
+        if ($workspace->trashed()) {
+            $workspace->forceDelete();
+            return back();
+        }
+
+        $workspace->members()->delete();
         $workspace->delete();
-        return redirect('/workspace');
+        return view('workspaces.index');
+    }
+    
+    public function restore(Workspace $workspace, Request $request) {
+        $workspace->restore();
+        $insertMember               = new Member;
+        $insertMember->user_id      = auth()->user()->id;
+        $insertMember->email        = auth()->user()->email;
+        $insertMember->role         = 'admin';
+        $insertMember->workspace_id = $request->id;
+        $insertMember->unique_code  = $request->unique_code;
+        $insertMember->save();
+        
+        return back();
     }
 }

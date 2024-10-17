@@ -60,6 +60,18 @@ class TaskItem extends Model
         return $this->hasMany(Assign::class, 'task_item_id');
     }
 
+    public function due_date() {
+        return $this->hasMany(DueDate::class, 'task_item_id');
+    }
+
+    public function taskitem_members() {
+        return $this->hasMany(TaskitemMember::class, 'task_item_id');
+    }
+
+    public function logs() {
+        return $this->hasMany(LogTaskitem::class, 'task_item_id');
+    }
+
     public function workspaces() {
         return $this->belongsTo(Workspace::class);
     }
@@ -67,7 +79,7 @@ class TaskItem extends Model
     public function favorited()
     {
         return (bool) Favorite::where('user_id', Auth::id())
-                            ->where('taskitem_id', $this->id)
+                            ->where('task_item_id', $this->id)
                             ->first();
     }
 }

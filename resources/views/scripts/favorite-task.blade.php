@@ -1,6 +1,6 @@
 <script>
     function toggleFavoriteTask(checkbox) {
-        const taskId = {{ $task->id }};
+        const taskId = checkbox.getAttribute('data-task-id');
         const url = checkbox.checked ? `/task-favorite/${taskId}` : `/task-unfavorite/${taskId}`;
         
         fetch(url, {
@@ -10,8 +10,6 @@
                 'Content-Type': 'application/json'
             },
         })
-        .then(response => {
-            return response.json();
-        })
+        .then(response => response.json())
     }
 </script>

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AssignCheckController;
+use App\Http\Controllers\AssignChecklistController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AssignController;
 use App\Http\Controllers\AttachmentController;
@@ -19,11 +21,13 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\TaskitemMemberController;
 use App\Http\Controllers\WorkspaceController;
 use App\Models\Member;
 use App\Models\Schedule;
 use App\Models\Board;
 use App\Models\Task;
+use App\Models\TaskItem;
 use App\Models\User;
 use App\Models\Workspace;
 use Illuminate\Http\Request;
@@ -47,6 +51,16 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/attendance', [PageController::class, 'attendance'])->name('attendance');
+
+    Route::get('/user-archive', function (User $user) {
+        $user = User::where('id', auth()->user()->id)->first();
+        $Archived_workspaces = Workspace::where('user_id', auth()->user()->id)->onlyTrashed()->get();
+        $Archived_boards = Board::where('user_id', auth()->user()->id)->onlyTrashed()->get();
+        $Archived_tasks = Task::where('user_id', auth()->user()->id)->onlyTrashed()->get();
+        $Archived_taskitems = TaskItem::onlyTrashed()->get();
+        $Archived_schedules = Schedule::where('user_id', auth()->user()->id)->onlyTrashed()->get();
+        return view('archive.user-archive', compact('Archived_workspaces', 'Archived_boards', 'Archived_tasks', 'Archived_taskitems', 'Archived_schedules', 'user'));
+    })->name('user.archive');
 
     Route::get('/workspace', function () {
         $workspaces = Workspace::all();
@@ -97,12 +111,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/create-workspace', [WorkspaceController::class, 'create']);
     Route::get('/edit-workspace/{workspace}', [WorkspaceController::class, 'edit']);
     Route::put('/edit-workspace/{workspace}', [WorkspaceController::class, 'update']);
-    Route::delete('/delete-workspace/{workspace}', [WorkspaceController::class, 'destroy']);
+    Route::delete('/delete-workspace/{workspace}', [WorkspaceController::class, 'destroy'])->withTrashed();
+    Route::post('/restore-workspace/{workspace}', [WorkspaceController::class, 'restore'])->withTrashed();
 
     Route::post('/create-board', [BoardController::class, 'create']);
     Route::get('/edit-board/{board}', [BoardController::class, 'edit']);
     Route::put('/edit-board/{board}', [BoardController::class, 'update']);
-    Route::delete('/delete-board/{board}', [BoardController::class, 'destroy']);
+    Route::delete('/delete-board/{board}', [BoardController::class, 'destroy'])->withTrashed();
+    Route::post('/restore-board/{board}', [BoardController::class, 'restore'])->withTrashed();
 
     Route::post('favorite/{board}', [BoardController::class, 'favorite'])->name('favorite');
     Route::post('unfavorite/{board}', [BoardController::class, 'unfavorite'])->name('unfavorite');
@@ -116,15 +132,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/schedule-edit/{schedule}', [ScheduleController::class, 'edit']);
     Route::put('/schedule-edit/{schedule}', [ScheduleController::class, 'update']);
     Route::delete('/schedule-delete/{schedule}', [ScheduleController::class, 'destroy']);
+    Route::post('/schedule-restore/{schedule}', [ScheduleController::class, 'restore'])->withTrashed();
     
     Route::post('/task-create', [TaskController::class, 'create']);
     Route::get('/task-edit/{task}', [TaskController::class, 'edit']);
     Route::put('/task-edit/{task}', [TaskController::class, 'update']);
-    Route::delete('/task-delete/{task}', [TaskController::class, 'destroy']);
+    Route::delete('/task-delete/{task}', [TaskController::class, 'destroy'])->withTrashed();
+    Route::post('/task-restore/{task}', [TaskController::class, 'restore'])->withTrashed();
     
     Route::post('task-favorite/{task}', [TaskController::class, 'favorite'])->name('task.favorite');
     Route::post('task-unfavorite/{task}', [TaskController::class, 'unfavorite'])->name('task.unfavorite');
-        
+    
     Route::post('/schedule-component-create', [ScheduleController::class, 'create_due']);
     
     Route::post('/tasks/update-order', [TaskController::class, 'updateOrder'])->name('tasks.updateOrder');
@@ -133,7 +151,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/task-item-create', [TaskItemController::class, 'create']);
     Route::get('/task-item-edit/{taskitem}', [TaskItemController::class, 'edit']);
     Route::put('/task-item-edit/{taskitem}', [TaskItemController::class, 'update']);
-    Route::delete('/task-item-delete/{taskitem}', [TaskItemController::class, 'destroy']);
+    Route::delete('/task-item-delete/{taskitem}', [TaskItemController::class, 'destroy'])->withTrashed();
+    Route::post('/task-item-restore/{taskitem}', [TaskItemController::class, 'restore'])->withTrashed();
+
+    // Route::get('/get-task-item', function (Workspace $workspace, Board $board) {
+    //     return redirect()->route('tasks.index', ['id' => $workspace->id])
+    //     ->with(['board' => $board]);
+    // })->name('taskitem.assign');
     
     Route::post('task-item-favorite/{taskitem}', [TaskItemController::class, 'favorite'])->name('task-item.favorite');
     Route::post('task-item-unfavorite/{taskitem}', [TaskItemController::class, 'unfavorite'])->name('task-item.unfavorite');
@@ -151,11 +175,25 @@ Route::middleware('auth')->group(function () {
     Route::get('/check-edit/{check}', [CheckController::class, 'edit']);
     Route::put('/check-edit/{check}', [CheckController::class, 'update']);
     Route::delete('/check-delete/{check}', [CheckController::class, 'destroy']);
+        
+    Route::post('/assign-check-create', [AssignCheckController::class, 'create']);
+    Route::get('/assign-check-edit/{assigncheck}', [AssignCheckController::class, 'edit']);
+    Route::put('/assign-check-edit/{assigncheck}', [AssignCheckController::class, 'update']);
+    Route::delete('/assign-check-delete/{assigncheck}', [AssignCheckController::class, 'destroy']);
     
     Route::post('/checklist-create', [ChecklistController::class, 'create']);
     Route::get('/checklist-edit/{checklist}', [ChecklistController::class, 'edit']);
     Route::put('/checklist-update', [ChecklistController::class, 'update'])->name('checklist.update');
+
+    Route::get('/checklist-title-edit/{checklist}', [ChecklistController::class, 'title_edit']);
+    Route::put('/checklist-title-edit/{checklist}', [ChecklistController::class, 'title_update']);
+
     Route::delete('/checklist-delete/{checklist}', [ChecklistController::class, 'destroy']);
+    
+    Route::post('/assign-checklist-create', [AssignChecklistController::class, 'create']);
+    Route::get('/assign-checklist-edit/{assignchecklist}', [AssignChecklistController::class, 'edit']);
+    Route::put('/assign-checklist-edit/{assignchecklist}', [AssignChecklistController::class, 'update']);
+    Route::delete('/assign-checklist-delete/{assignchecklist}', [AssignChecklistController::class, 'destroy']);
     
     Route::post('/attachment-create', [AttachmentController::class, 'create']);
     Route::get('/attachment-edit/{attachment}', [AttachmentController::class, 'edit']);
@@ -171,11 +209,33 @@ Route::middleware('auth')->group(function () {
     Route::get('/comment-edit/{comment}', [CommentController::class, 'edit']);
     Route::put('/comment-edit/{comment}', [CommentController::class, 'update']);
     
+    Route::post('/taskitem-member-create', [TaskitemMemberController::class, 'create']);
+    Route::delete('/taskitem-member-leave/{taskitem_member}', [TaskitemMemberController::class, 'leave']);
+    
     Route::get('/member-edit/{member}', [MemberController::class, 'edit']);
     Route::put('/member-edit/{member}', [MemberController::class, 'update']);
     Route::delete('/member-kick/{member}', [MemberController::class, 'kick']);
     
     Route::prefix('/workspace/{workspace}')->group(function() {
+        Route::get('/settings', function(Workspace $workspace, Member $member) {
+            return view('workspaces.settings', compact('workspace', 'member'));
+        })->name('workspaces.settings');
+    
+        Route::get('/archive', function (Workspace $workspace) {
+            $Archived_workspaces = Workspace::onlyTrashed()->where('id', $workspace->id)->get();
+            $Archived_boards = Board::onlyTrashed()->where('workspace_id', $workspace->id)->get();
+            $Archived_tasks = Task::onlyTrashed()->whereHas('board', function($q) use ($workspace) {
+                $q->where('workspace_id', $workspace->id);
+            })->get();
+            $Archived_taskitems = TaskItem::onlyTrashed()->whereHas('tasks', function($q) use ($workspace) {
+                $q->whereHas('board', function($q) use ($workspace) {
+                    $q->where('workspace_id', $workspace->id);
+                });
+            })->get();
+            $Archived_schedules = Schedule::onlyTrashed()->where('workspace_id', $workspace->id)->get();        
+            return view('archive.workspace-archive', compact('Archived_workspaces', 'Archived_boards', 'Archived_tasks', 'Archived_taskitems', 'Archived_schedules', 'workspace'));
+        })->name('workspace.archive');
+        
         Route::get('/members', function(Workspace $workspace) {
             $members = Member::all();
             return view('workspaces.member', compact('workspace','members'));    
@@ -196,10 +256,6 @@ Route::middleware('auth')->group(function () {
             return view('schedule.index', compact('workspace', 'schedules'));
         })->name('schedule.index');
 
-        Route::get('/settings', function(Workspace $workspace, Member $member) {
-            return view('workspaces.settings', compact('workspace', 'member'));
-        })->name('workspaces.settings');
-    
         Route::get('/board-task/{board}', function ($boardId) {
             $users = User::all();
             $explodetaskBoardId = explode("board-task/", URL::current());
@@ -211,7 +267,8 @@ Route::middleware('auth')->group(function () {
                     ->get();
             })->first();
             $tasks = Task::all();
-            return view('tasks.index', compact('tasks', 'board', 'schedules', 'users'));
+            $members = Member::all();
+            return view('tasks.index', compact('tasks', 'board', 'schedules', 'users', 'members'));
         })->name('tasks.index');
     });
 });

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('favorite_taskitems', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('taskitem_id')->unsigned();
+            $table->foreignId('task_item_id')->constrained();
             $table->timestamps();
         });
     }

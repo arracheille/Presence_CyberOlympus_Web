@@ -24,13 +24,12 @@
                 <form action="/attachment-delete/{{ $attachment->id }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="delete-btn">Delete</button>
+                <button type="submit" class="delete-btn">Archive</button>
                 </form>                        
             </div>
-            </div>
+        </div>
         <img src="{{ asset($attachment->image) }}">
         <p class="text-small">Image: {{ basename($attachment->image) }}</p>
-
     </div>
     @endif
     @if (empty($attachment->link))
@@ -62,7 +61,7 @@
                 <form action="/attachment-delete/{{ $attachment->id }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="delete-btn">Delete</button>
+                    <button type="submit" class="delete-btn">Archive</button>
                 </form>
                 </div>
         </div>

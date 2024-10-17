@@ -34,7 +34,7 @@ class Board extends Model
     }
 
     public function tasks() {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Task::class, 'board_id');
     }
 
     public function favorited()

@@ -48,7 +48,7 @@
                       <textarea id="description-edit" name="description"></textarea>
                       
                       <div class="modal-footer">
-                        <a href="/softDelete/{{ $todo->id }}" class="delete-btn">Delete</a>
+                        <a href="/softDelete/{{ $todo->id }}" class="delete-btn">Archive</a>
                         <button type="button" class="cancel-btn" onclick="cancelEdititem()">Cancel</button>
                         <button type="submit" class="submit-btn">Submit</button>
                       </div>
