@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('due_dates', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('task_item_id')->constrained();
-            $table->dateTime('due_at');
+            $table->foreignId('schedule_id')->nullable()->constrained();
+            $table->foreignId('due_date_id')->nullable()->constrained();
+            $table->boolean('read_at');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('due_dates');
+        Schema::dropIfExists('notifications');
     }
 };

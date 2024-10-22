@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Board;
 use App\Models\Member;
+use App\Models\Notification;
 use App\Models\Task;
 use App\Models\Workspace;
 use Illuminate\Support\Facades\Request;
@@ -30,9 +31,11 @@ class AppServiceProvider extends ServiceProvider
                 // $workspaces     = Workspace::where('user_id', auth()->user()->id)->where('id', Request::segment(2))->get();
                 $workspaces     = Workspace::where('id', Request::segment(2))->get();
                 $workspacesList = Member::where('user_id', auth()->user()->id)->get();
+                $notifications = Notification::where('user_id', auth()->user()->id)->get();
 
                 $view->with('workspaces', $workspaces);
                 $view->with('workspacesList', $workspacesList);
+                $view->with('notifications', $notifications);
             }
             $boards = Board::all();
             $view->with('boards', $boards);

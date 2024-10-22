@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
 
@@ -34,32 +35,6 @@ class ScheduleController extends Controller
         
         Schedule::create($schedules);
         
-        return back();
-        // return redirect('/schedule')->with('success', 'Created successfully');
-    }
-
-    public function create_due(Request $request) {
-        $schedules = $request->validate([
-            'title' => 'required',
-            'start' => 'required',
-            'end' => 'required',
-            'task_item_id' => 'required|exists:task_items,id',
-            'workspace_id' => 'required|exists:workspaces,id',
-            'background_color' => 'required',
-        ]);
-
-        $schedules['title'] = strip_tags($schedules['title']);
-        $schedules['start'] = strip_tags($schedules['start']);
-        $schedules['end'] = strip_tags($schedules['end']);
-        $schedules['task_item_id'] = $request->task_item_id;
-        $schedules['workspace_id'] = $request->workspace_id;
-        $schedules['background_color'] = strip_tags($schedules['background_color']);
-
-        $schedules['user_id'] = auth()->id();
-
-        Schedule::create($schedules);
-
-        // return back();
         return back();
     }
 
@@ -100,9 +75,42 @@ class ScheduleController extends Controller
         return back();
     }
 
-    // public function destroy(Schedule $schedule) {
-    //     $schedule->delete();
+    public function read(Request $request)
+    {
+        $notification = Notification::find($request->id);
+
+        if ($notification && is_null($notification->read_at)) {
+            $notification->read_at = now();
+            $notification->save();
+
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 404);
+    }
+    
+    // public function create_due(Request $request) {
+    //     $schedules = $request->validate([
+    //         'title' => 'required',
+    //         'start' => 'required',
+    //         'end' => 'required',
+    //         'task_item_id' => 'required|exists:task_items,id',
+    //         'workspace_id' => 'required|exists:workspaces,id',
+    //         'background_color' => 'required',
+    //     ]);
+
+    //     $schedules['title'] = strip_tags($schedules['title']);
+    //     $schedules['start'] = strip_tags($schedules['start']);
+    //     $schedules['end'] = strip_tags($schedules['end']);
+    //     $schedules['task_item_id'] = $request->task_item_id;
+    //     $schedules['workspace_id'] = $request->workspace_id;
+    //     $schedules['background_color'] = strip_tags($schedules['background_color']);
+
+    //     $schedules['user_id'] = auth()->id();
+
+    //     Schedule::create($schedules);
+
+    //     // return back();
     //     return back();
-    //     // return redirect('/schedule')->with('success', 'Deleted successfully');
     // }
 }

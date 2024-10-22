@@ -10,11 +10,17 @@
                         <span class="close">&times;</span>
                     </div>
                     <div class="dropdown-notification">
-                       {{-- @if ()
-                           
-                       @else
-                           
-                       @endif --}}
+                        @foreach ($notifications as $notification)
+                            <div class="notification-content">
+                                <p class="text-small">Schedule Notification</p>
+                                <p>Schedule 
+                                    <a href="{{ route('schedule.index', ['workspace' => $notification->schedule->workspace_id, 'id' => $notification->schedule->id]) }}">
+                                        {{ $notification->schedule->title }}
+                                    </a>
+                                    is almost due!
+                                </p>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

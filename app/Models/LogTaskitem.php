@@ -31,7 +31,7 @@ class LogTaskitem extends Model
     }
 
     public function taskitem() {
-        return $this->belongsTo(Task::class, 'task_item_id');
+        return $this->belongsTo(TaskItem::class, 'task_item_id');
     }
 
     public function labels() {

@@ -38,27 +38,24 @@ class AssignController extends Controller
                 $user = User::where('name', $assigns['user'])->first();
             
                 if ($user && $user->email) {
-                    $mailUser = $user->email; // Menggunakan alamat email pengguna
-                    
-                    // Kirim email
+                    $mailUser = $user->email;
                     Mail::to($mailUser)->send(new AssignMail($findBoard, $findWorkspace, $findTaskItem));
                 }    
             }
         }
-    
 
         // $mailUser = User::where('name', $assigns['user'])->first();
     
         // if ($mailUser) {
-        //     $findBoard = Task::find($request->task_id); // Mengambil board berdasarkan task_id
-        //     $findWorkspace = Workspace::find($findBoard->workspace_id); // Mengambil workspace berdasarkan workspace_id di board
+        //     $findBoard       = Task::find($request->task_id);
+        //     $findWorkspace   = Workspace::find($findBoard->workspace_id);
             
         //     Mail::to($mailUser->email)->send(new AssignMail($findBoard, $findWorkspace));
         // }
 
-        // $mailUser       = (email user);
-        // $findBoard       = (board id);
-        // $findWorkspace  (workspace id)= 
+        // $mailUser        = 
+        // $findBoard       =
+        // $findWorkspace   =
         // Mail::to($mailUser)->send(new AssignMail($findBoard, $findWorkspace));
 
         return back()->with('board', $request->board_id);

@@ -41,4 +41,8 @@ class Schedule extends Model
     public function taskitem() {
         return $this->belongsTo(TaskItem::class, 'task_item_id');
     }
+
+    public function notifications() {
+        return $this->belongsTo(Notification::class, 'schedule_id');
+    }
 }

@@ -93,6 +93,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(LogTaskitem::class, 'user_id');
     }
 
+    public function notifications() {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
+
+    public function due_date() {
+        return $this->hasMany(DueDate::class, 'user_id');
+    }
+
     public function favorites()
     {
         return $this->belongsToMany(Board::class, 'favorites', 'user_id', 'board_id')->withTimestamps();

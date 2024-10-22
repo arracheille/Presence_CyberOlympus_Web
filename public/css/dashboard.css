@@ -855,7 +855,7 @@ a.attachment-link:hover p {
     background-color: var(--darkblue);
     padding: var(--size-s);
     border-radius: var(--border-container);
-    box-shadow: 0 20px 35px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 35px 0 rgba(0, 0, 0, 0.294);
     opacity: 0;
     pointer-events: none;
     transform: translateY(-10px);
@@ -985,8 +985,24 @@ input[type="radio"]:checked + .radio-button {
     right: 0;
     bottom: 0;
 }
-.log-content{
+.log-content {
     display: flex;
     gap: 4px;
     align-items: center;
+}
+.dropdown-notification {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-xs);
+}
+.notification-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    background: var(--blue);
+    padding: var(--size-xs);
+    border-radius: var(--border-container);
+}
+.notification-content a {
+    text-decoration: underline;
 }

@@ -3,10 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Mail\ScheduleMail;
+use App\Mail\TaskDueMail;
+use App\Models\DueDate;
+use App\Models\Notification;
 use App\Models\Schedule;
 use App\Models\User;
-use App\Notifications\TaskItemNotification;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Console\Command;
 
@@ -17,14 +18,14 @@ class NotifyUsers extends Command
      *
      * @var string
      */
-    protected $signature = 'task_due:notify';
+    protected $signature = 'schedule:due';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Taskitem is almost due';
+    protected $description = 'Schedule Due Date';
 
     /**
      * Execute the console command.
@@ -34,18 +35,21 @@ class NotifyUsers extends Command
         $schedules = Schedule::with('user')
         ->where('end', '>=', now())
         ->where('end', '<=', now()->addDays(3))
+        ->whereHas('user')
         ->get();
 
-        $groupedSchedules = [];
         foreach ($schedules as $schedule) {
-            $groupedSchedules[$schedule->user->id][] = $schedule;
+            $mailUser = User::where('id', $schedule->user->id)->first();
+            Mail::to($mailUser)->send(new ScheduleMail($schedules->where('user_id', $schedule->user->id)));
+
+            $notifications = new Notification();
+            $notifications->user_id = $schedule->user->id;
+            $notifications->schedule_id = $schedule->id;
+            $notifications->due_date_id = null;
+            $notifications->read_at = false;
+            $notifications->save();
         }
 
-        foreach ($groupedSchedules as $userId => $schedules) {
-            $user = User::find($userId);
-            Mail::to($user->email)->send(new ScheduleMail($schedules));
-            // $user->Mail(new ScheduleMail($schedules));
-        }
         return 0;
     }
 }

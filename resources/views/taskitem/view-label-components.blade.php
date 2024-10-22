@@ -27,7 +27,7 @@
 @if(!is_null($taskitem->description) && $taskitem->description !== '' ||
     $taskitem->checks->whereNotNull('title')->where('title', '!=', '')->first() ||
     $taskitem->comments->whereNotNull('comment')->where('comment', '!=', '')->first() ||
-    $taskitem->schedules->whereNotNull('task_item_id')->where('task_item_id', '!=', '')->first() ||
+    $taskitem->due_dates->whereNotNull('task_item_id')->where('task_item_id', '!=', '')->first() ||
     $taskitem->taskitem_members->whereNotNull('task_item_id')->where('task_item_id', '!=', '')->first() ||
     $taskitem->attachments->whereNotNull('link')->where('link', '!=', '')->first() ||
     $taskitem->attachments->whereNotNull('link_display')->where('link_display', '!=', '')->first() ||
@@ -66,9 +66,9 @@
             </div>
         @endif
 
-        @if($taskitem->schedules->whereNotNull('task_item_id')->where('task_item_id', '!=', '')->first())
+        @if($taskitem->due_dates->whereNotNull('task_item_id')->where('task_item_id', '!=', '')->first())
             <div class="content-task-component" id="item-due-date">
-                @if (\Carbon\Carbon::parse($taskitem->schedules->first()->end)->lt(\Carbon\Carbon::now()))
+                @if (\Carbon\Carbon::parse($taskitem->due_dates->first()->due_at)->lt(\Carbon\Carbon::now()))
                 <span class="gradient-text-red"><i class="fa-solid fa-clock"></i> !</span>
                 @else
                 <i class="fa-solid fa-clock"></i>

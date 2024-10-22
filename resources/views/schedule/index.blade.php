@@ -6,6 +6,9 @@
             <p>From workspace <strong>{{ $workspace->title }}</strong></p>
         </div>
         <div id="calendar"></div>
+        @isset($id)
+        <div id="includeIdSchedule" ></div>
+        @endisset
       </div>
     @foreach ($workspace->schedules as $schedule)
     <div id="editscheduleModal-{{ $schedule->id }}" class="modal">
@@ -97,8 +100,35 @@
 
     <script>
         var schedules = @json($workspace->schedules);
+        
+        let id = "{{ request()->query('id') }}"; 
+        if(id){
+            openEditschedule(id)
+        }
 
+        $(document).ready(function() {
+            id = "{{ request()->query('id') }}";
+            if (id) {
+                $.ajax({
+                    url: '{{ route("notifications.read") }}',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        id: id
+                    },
+                    success: function(response) {
+                        console.log('Notifikasi telah ditandai sebagai dibaca.');
+                    },
+                    error: function(xhr) {
+                        console.error('Gagal menandai notifikasi sebagai dibaca:', xhr);
+                    }
+                });
+            }
+        });
+
+        
         function openAddschedule(date) {
+            
             document.getElementById('addscheduleModal').style.display = 'block';
         }
 
@@ -107,6 +137,7 @@
         }
 
         function openEditschedule(id) {
+
             document.getElementById('editscheduleModal-' + id).style.display = 'block';
         }
 

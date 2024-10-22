@@ -60,7 +60,7 @@ class TaskItem extends Model
         return $this->hasMany(Assign::class, 'task_item_id');
     }
 
-    public function due_date() {
+    public function due_dates() {
         return $this->hasMany(DueDate::class, 'task_item_id');
     }
 

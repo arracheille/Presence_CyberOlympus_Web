@@ -18,6 +18,7 @@ use App\Http\Controllers\CodeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CoverController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DueDateController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\MemberController;
@@ -102,6 +103,17 @@ Route::middleware('auth')->group(function () {
         }
     })->name('workspaces.join');
 
+    Route::get('/get-schedule', function (Workspace $workspace, Schedule $schedule) {
+        $findWorkspace = Workspace::where('id', $schedule->workspace->id)
+                                ->where('user_id', $schedule->user->id)
+                                ->first();
+        if ($findWorkspace) {
+            return redirect('/workspace/' . $findWorkspace->id . '/schedule');
+        } else {
+            return redirect()->back()->with('error', 'Workspace not found!');
+        }
+    })->name('schedule.get');
+
     Route::delete('/workspace-leave/{member}', [MemberController::class, 'leave']);
 
     Route::get('/workspace/{workspace}', function (Workspace $workspace) {
@@ -133,6 +145,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/schedule-edit/{schedule}', [ScheduleController::class, 'update']);
     Route::delete('/schedule-delete/{schedule}', [ScheduleController::class, 'destroy']);
     Route::post('/schedule-restore/{schedule}', [ScheduleController::class, 'restore'])->withTrashed();
+
+    Route::post('/schedule/read-notification', [ScheduleController::class, 'read'])->name('notifications.read');
     
     Route::post('/task-create', [TaskController::class, 'create']);
     Route::get('/task-edit/{task}', [TaskController::class, 'edit']);
@@ -180,6 +194,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/assign-check-edit/{assigncheck}', [AssignCheckController::class, 'edit']);
     Route::put('/assign-check-edit/{assigncheck}', [AssignCheckController::class, 'update']);
     Route::delete('/assign-check-delete/{assigncheck}', [AssignCheckController::class, 'destroy']);
+    
+    Route::post('/due-date-create', [DueDateController::class, 'create']);
+    Route::get('/due-date-edit/{duedate}', [DueDateController::class, 'edit']);
+    Route::put('/due-date-edit/{duedate}', [DueDateController::class, 'update']);
+    Route::delete('/due-date-delete/{duedate}', [DueDateController::class, 'destroy']);
     
     Route::post('/checklist-create', [ChecklistController::class, 'create']);
     Route::get('/checklist-edit/{checklist}', [ChecklistController::class, 'edit']);
@@ -251,9 +270,16 @@ Route::middleware('auth')->group(function () {
             return view('boards.index', compact('workspace', 'boards'));
         })->name('boards.index');
         
-        Route::get('/schedule', function (Workspace $workspace) {
-            $schedules = Schedule::all();
-            return view('schedule.index', compact('workspace', 'schedules'));
+        Route::get('/schedule', function (Workspace $workspace, Request $request) {
+            // dd($request->all());
+            $id = $request->id ?? "";
+            if ($id) {
+                $schedules = Schedule::all();
+                return view('schedule.index', compact('workspace', 'schedules', 'id'));
+            } else {
+                $schedules = Schedule::all();
+                return view('schedule.index', compact('workspace', 'schedules'));
+            }
         })->name('schedule.index');
 
         Route::get('/board-task/{board}', function ($boardId) {

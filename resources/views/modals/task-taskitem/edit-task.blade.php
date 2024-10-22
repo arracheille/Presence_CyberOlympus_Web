@@ -22,29 +22,29 @@
             <label for="title">Title :</label>
             <input type="text" name="title" value="{{ $task->title }}">
             <div class="grid-color">
-                <input type="radio" id="option-task-background-{{ $task->id }}-1" name="background_color" value="gradient-orange"
+                <input type="radio" id="option-edit-task-background-{{ $task->id }}-1" name="background_color" value="gradient-orange"
                     @if($task->background_color == 'gradient-orange') checked @endif />
-                <label for="option-task-background-{{ $task->id }}-1" class="radio-button color" id="gradient-orange"></label>
+                <label for="option-edit-task-background-{{ $task->id }}-1" class="radio-button color" id="gradient-orange"></label>
                 
-                <input type="radio" id="option-task-background-{{ $task->id }}-2" name="background_color" value="gradient-red"
+                <input type="radio" id="option-edit-task-background-{{ $task->id }}-2" name="background_color" value="gradient-red"
                     @if($task->background_color == 'gradient-red') checked @endif />
-                <label for="option-task-background-{{ $task->id }}-2" class="radio-button color" id="gradient-red"></label>
+                <label for="option-edit-task-background-{{ $task->id }}-2" class="radio-button color" id="gradient-red"></label>
                 
-                <input type="radio" id="option-task-background-{{ $task->id }}-3" name="background_color" value="gradient-blue"
+                <input type="radio" id="option-edit-task-background-{{ $task->id }}-3" name="background_color" value="gradient-blue"
                     @if($task->background_color == 'gradient-blue') checked @endif />
-                <label for="option-task-background-{{ $task->id }}-3" class="radio-button color" id="gradient-blue"></label>
+                <label for="option-edit-task-background-{{ $task->id }}-3" class="radio-button color" id="gradient-blue"></label>
                 
-                <input type="radio" id="option-task-background-{{ $task->id }}-4" name="background_color" value="gradient-green"
+                <input type="radio" id="option-edit-task-background-{{ $task->id }}-4" name="background_color" value="gradient-green"
                     @if($task->background_color == 'gradient-green') checked @endif />
-                <label for="option-task-background-{{ $task->id }}-4" class="radio-button color" id="gradient-green"></label>
+                <label for="option-edit-task-background-{{ $task->id }}-4" class="radio-button color" id="gradient-green"></label>
                 
-                <input type="radio" id="option-task-background-{{ $task->id }}-5" name="background_color" value="gradient-pink"
+                <input type="radio" id="option-edit-task-background-{{ $task->id }}-5" name="background_color" value="gradient-pink"
                     @if($task->background_color == 'gradient-pink') checked @endif />
-                <label for="option-task-background-{{ $task->id }}-5" class="radio-button color" id="gradient-pink"></label>
+                <label for="option-edit-task-background-{{ $task->id }}-5" class="radio-button color" id="gradient-pink"></label>
                 
-                <input type="radio" id="option-task-background-6" name="background_color" value="gradient-purple"
+                <input type="radio" id="option-edit-task-background-{{ $task->id }}-6" name="background_color" value="gradient-purple"
                     @if($task->background_color == 'gradient-purple') checked @endif />
-                <label for="option-task-background-6" class="radio-button color" id="gradient-purple"></label>
+                <label for="option-edit-task-background-{{ $task->id }}-6" class="radio-button color" id="gradient-purple"></label>
             </div>
             <button class="submit-btn">Submit</button>
         </form>
