@@ -14,12 +14,14 @@ class TaskDueMail extends Mailable
     use Queueable, SerializesModels;
 
     public $due_dates;
+    public $taskitems;
     /**
      * Create a new message instance.
      */
-    public function __construct($due_dates)
+    public function __construct($due_dates, $taskitems)
     {
         $this->due_dates = $due_dates;
+        $this->taskitems = $taskitems;
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Mail\TaskDueMail;
 use App\Models\DueDate;
 use App\Models\Notification;
+use App\Models\TaskItem;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
@@ -37,15 +38,16 @@ class TaskItemDue extends Command
         ->get();
 
         foreach ($due_dates as $due_date) {
+            $taskitems = TaskItem::all();
             $mailUser = User::where('id', $due_date->user->id)->first();
-            Mail::to($mailUser)->send(new TaskDueMail($due_date));
+            Mail::to($mailUser)->send(new TaskDueMail($due_date, $taskitems));
 
-            // $notifications = new Notification();
-            // $notifications->user_id = $due_date->user->id;
-            // $notifications->schedule_id = null;
-            // $notifications->due_date_id = $due_date->id;
-            // $notifications->read_at = false;
-            // $notifications->save();
+            $notifications = new Notification();
+            $notifications->user_id = $due_date->user->id;
+            $notifications->schedule_id = null;
+            $notifications->due_date_id = $due_date->id;
+            $notifications->read_at = false;
+            $notifications->save();
         }
 
         return 0;

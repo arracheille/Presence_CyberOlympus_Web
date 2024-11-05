@@ -28,15 +28,20 @@
             @foreach ($workspacesList as $workspace)
                 <div class="workspace-content">
                     <div class="workspace-title">
-                        <a href="{{ url('/workspace/' . $workspace->workspace->id) }}">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($workspace->workspace->title) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon" alt="Avatar">
-                            <div class="workspace-title-author">
-                                <h4>{{ $workspace->workspace->title }}</h4>
-                                <p>Created by: <span>{{ $workspace->workspace->user->name }}</span></p>
-                                @if(!is_null($workspace->description) && $workspace->description !== '')
-                                <p class="text-small">{{ $workspace->workspace->description }}</p>
+                        <a href="{{ route('workspaces.dashboard', ['workspace' => $workspace->workspace->id]) }}">
+                            <div class="avatar-title-author">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($workspace->workspace->title) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon" alt="Avatar">
+                                <div class="title-by">
+                                    <h4>{{ $workspace->workspace->title }}</h4>
+                                    <p class="text-small">Created by: <span>{{ $workspace->workspace->user->name }}</span></p>
+                                    <p class="text-small">{{ $workspace->workspace->type }} Workspace</p>
+                                </div>
+                            </div>
+                            <div class="workspace-desc">
+                                @if (empty($workspace->workspace->description))
+                                @else                                    
+                                <p>{{ $workspace->workspace->description }}</p>
                                 @endif
-                                <p class="text-small">{{ $workspace->workspace->type }}</p>
                             </div>
                         </a>
                         {{-- <form action="{{ route('favorite', $workspace->id) }}" method="POST" class="star-form">
@@ -49,7 +54,7 @@
                         </form> --}}
                         <div class="task-share workspace">
                             <div class="dropdown">
-                                <button class="link">Share Workspace</button>
+                                <button class="link gradient-h-blue">Share Workspace</button>
                                 <div class="dropdown-menu ">
                                     <div class="dropdown-title-close">
                                         <h4>Workspace Link</h4>
@@ -88,7 +93,7 @@
                                     };
                                 @endphp
                                 <div class="content-board center" id="{{ $board_color }}">
-                                    <a href="{{ url('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) }}">
+                                    <a href="{{ route('tasks.index', ['workspace' => $workspace->id, 'board' => $board->id]) }}">
                                     <p>{{ $board['title'] }}</p>
                                     </a>
                                     <div class="content-board-crud">
@@ -113,7 +118,7 @@
                                     };
                                 @endphp
                                 <div class="content-board center" id="{{ $board_color }}">
-                                    <a href="{{ url('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) }}">
+                                    <a href="{{ route('tasks.index', ['workspace' => $workspace->id, 'board' => $board->id]) }}">
                                     <p>{{ $board['title'] }}</p>
                                     </a>
                                     <div class="content-board-crud">

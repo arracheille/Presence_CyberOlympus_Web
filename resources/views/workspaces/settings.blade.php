@@ -28,7 +28,4 @@
         </form>
 
     @endif
-    <button class="gradient-h-green">
-        <a href="{{ url('/workspace' . '/' . $workspace->id . '/archive') }}">Workspace Archived Data</a>
-    </button>
 </x-app-layout>

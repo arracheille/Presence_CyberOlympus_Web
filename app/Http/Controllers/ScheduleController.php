@@ -77,16 +77,22 @@ class ScheduleController extends Controller
 
     public function read(Request $request)
     {
-        $notification = Notification::find($request->id);
+        $dataChecklist = Notification::find($request->schedule_id);
 
-        if ($notification && is_null($notification->read_at)) {
-            $notification->read_at = now();
-            $notification->save();
+        if ($dataChecklist) {
+            $dataChecklist->read_at += 1;
+            $dataChecklist->save();
 
-            return response()->json(['success' => true]);
+            return response()->json([
+                'message'     => 'Berhasil simpan',
+                'read_at'  => $request->read_at
+            ]);
+
+        } else {
+            return response()->json([
+                'message' => 'Gagal simpan'
+            ]);
         }
-
-        return response()->json(['success' => false], 404);
     }
     
     // public function create_due(Request $request) {

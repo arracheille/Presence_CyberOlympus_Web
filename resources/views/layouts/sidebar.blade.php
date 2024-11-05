@@ -29,18 +29,19 @@
   <ul>
     <li>
       @foreach ($workspaces as $workspace)
-      <a href="{{ url('/workspace/' . $workspace->id)}}" 
-        class="{{ request()->is('workspace/' . $workspace->id) ? 'active' : '' }}">
+      <a href="{{ route('workspaces.dashboard', ['workspace' => $workspace->id]) }}" 
+        class="{{ Route::is('workspaces.dashboard', ['workspace' => $workspace->id]) ? 'active' : '' }}">
         <img src="https://ui-avatars.com/api/?name={{ urlencode($workspace->title) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon-small" alt="Avatar">
         <h4>Workspace</h4>
-      </a>    
+      </a>
       @endforeach
     </li>
   </ul>
   <ul>
     @foreach ($workspaces as $workspace)
     <li>
-      <a href="{{ url('/workspace' . '/' . $workspace->id . '/members') }}" class="{{ request()->is('workspace' . '/' . $workspace->id . '/members') ? 'active' : '' }}">
+      <a href="{{ route('members.index', ['workspace' => $workspace->id]) }}" 
+        class="{{ Route::is('members.index', ['workspace' => $workspace->id]) ? 'active' : '' }}">
         <i class="fa-solid fa-user"></i>
         <h4>{{ __('Members') }}</h4>
       </a>
@@ -50,7 +51,8 @@
   <ul>
   @foreach ($workspaces as $workspace)
     <li class="list-data">
-      <a href="{{ url('/workspace' . '/' . $workspace->id . '/boards') }}" class="{{ request()->is('workspace' . '/' . $workspace->id . '/boards') ? 'active' : '' }}">
+      <a href="{{ route('boards.index', ['workspace' => $workspace->id]) }}" 
+        class="{{ Route::is('boards.index', ['workspace' => $workspace->id]) ? 'active' : '' }}">
         <i class="fa-solid fa-tachograph-digital"></i>
         <h4>{{ __('Board') }}</h4>
       </a>
@@ -69,8 +71,8 @@
         };
       @endphp
       <li class="subdata">
-        <a href="{{ url('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) }}" id="{{ $board_color }}"
-          class="{{ request()->is('workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) ? 'active' : '' }}">
+        <a href="{{ route('boards.index', ['workspace' => $workspace->id]) }}" id="{{ $board_color }}"
+          class="{{ Route::is('boards.index', ['workspace' => $workspace->id]) ? 'active' : '' }}">  
           <p>{{ $board->title }}</p>
         </a>
       </li>
@@ -87,26 +89,20 @@
         };
       @endphp
       <li class="subdata">
-        <a href="{{ url('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) }}" id="{{ $board_color }}"
-          class="{{ request()->is('workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) ? 'active' : '' }}">
+        <a href="{{ route('tasks.index', ['workspace' => $workspace->id, 'board' => $board->id]) }}" id="{{ $board_color }}"
+          class="{{ Route::is('tasks.index', ['workspace' => $workspace->id, 'board' => $board->id]) ? 'active' : '' }}">  
           <p>{{ $board->title }}</p>
         </a>
       </li>
     @endif
-
-    {{-- <li class="subdata">
-      <a href="{{ url('/board-task/' . $board->id) }}" id="{{ $board_color }}"
-        class="{{ request()->is('board-task/' . $board->id) ? 'active' : '' }}">
-        <p>{{ $board->title }}</p>
-      </a>
-    </li> --}}
   @endforeach
   @endforeach
   </ul>
   <ul>
     @foreach ($workspaces as $workspace)
     <li>
-      <a href="{{ url('/workspace' . '/' . $workspace->id . '/schedule') }}" class="{{ request()->is('workspace' . '/' . $workspace->id . '/schedule') ? 'active' : '' }}">
+      <a href="{{ route('schedule.index', ['workspace' => $workspace->id]) }}" 
+        class="{{ Route::is('schedule.index', ['workspace' => $workspace->id]) ? 'active' : '' }}">
         <i class="fa-solid fa-calendar-days"></i>
         <h4>{{ __('Schedule') }}</h4>
       </a>
@@ -121,16 +117,26 @@
       </a>
     </li>
   </ul>
+  @foreach ($workspaces as $workspace)
   <ul>
-    @foreach ($workspaces as $workspace)
     <li>
-      <a href="{{ url('/workspace' . '/' . $workspace->id . '/settings') }}" class="{{ request()->is('workspace' . '/' . $workspace->id . '/settings') ? 'active' : '' }}">
+      <a href="{{ route('workspaces.settings', ['workspace' => $workspace->id]) }}" 
+        class="{{ Route::is('workspaces.settings', ['workspace' => $workspace->id]) ? 'active' : '' }}">
         <i class="fa-solid fa-gears"></i>
         <h4>{{ __('Settings') }}</h4>
       </a>
     </li>
-    @endforeach
   </ul>
+  <ul>
+    <li>
+      <a href="{{ route('workspace.archive', ['workspace' => $workspace->id]) }}" 
+        class="{{ Route::is('workspace.archive', ['workspace' => $workspace->id]) ? 'active' : '' }}">
+        <i class="fa-solid fa-folder-open"></i>
+        <h4>{{ __('Archived') }}</h4>
+      </a>
+    </li>
+  </ul>
+  @endforeach
   @else
   <ul>
     <li>
@@ -162,8 +168,8 @@
     @if (auth()->user()->usertype == 'superadmin')
       @foreach ($workspaces as $workspace)
       <li class="subdata">
-        <a href="{{ url('/workspace/' . $workspace->id) }}"
-          class="{{ request()->is('workspace/' . $workspace->id) ? 'active' : '' }}">
+        <a href="{{ route('workspaces.dashboard', ['workspace' => $workspace->id]) }}"
+          class="{{ Route::is('workspaces.dashboard', ['workspace' => $workspace->id]) ? 'active' : '' }}">
           <img src="https://ui-avatars.com/api/?name={{ urlencode($workspace->title) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon-small" alt="Avatar">
           <p>{{ $workspace->title }}</p>
         </a>
@@ -172,15 +178,15 @@
     @else
       @foreach ($workspacesList as $workspace)
       <li class="subdata">
-        <a href="{{ url('/workspace/' . $workspace->workspace->id) }}"
-          class="{{ request()->is('workspace/' . $workspace->workspace->id) ? 'active' : '' }}">
+        <a href="{{ route('workspaces.dashboard', ['workspace' => $workspace->workspace->id]) }}"
+          class="{{ Route::is('workspaces.dashboard', ['workspace' => $workspace->workspace->id]) ? 'active' : '' }}">
           <img src="https://ui-avatars.com/api/?name={{ urlencode($workspace->workspace->title) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon-small" alt="Avatar">
           <p>{{ $workspace->workspace->title }}</p>
         </a>
       </li>
       @endforeach
-    @endif
     </ul>
+    @endif
     @if(auth()->user()->usertype == 'superadmin')
     <ul>
       <li>

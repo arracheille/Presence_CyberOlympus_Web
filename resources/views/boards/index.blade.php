@@ -18,7 +18,7 @@
                     };
                 @endphp
                 <div class="content-board center" id="{{ $board_color }}">
-                    <a href="{{ url('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) }}">
+                    <a href="{{ route('tasks.index', ['workspace' => $workspace->id, 'board' => $board->id]) }}">
                         <p>{{ $board['title'] }}</p>
                     </a>
                     <div class="content-board-crud">
@@ -43,7 +43,7 @@
                     };
                 @endphp
                 <div class="content-board center" id="{{ $board_color }}">
-                    <a href="{{ url('/workspace' . '/' . $workspace->id . '/board-task' . '/' . $board->id) }}">
+                    <a href="{{ route('tasks.index', ['workspace' => $workspace->id, 'board' => $board->id]) }}">
                         <p>{{ $board['title'] }}</p>
                     </a>
                     <div class="content-board-crud">

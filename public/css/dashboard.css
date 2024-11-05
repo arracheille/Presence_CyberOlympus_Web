@@ -248,12 +248,20 @@
 }
 .workspace-content {
     gap: var(--size-s);
+    background: var(--blue);
+    padding: var(--size-m);
+    border-radius: var(--border-container);
 }
 .workspace-container,
 .workspace-content,
 .member-container {
     display: flex;
     flex-direction: column;
+}
+.avatar-title-author {
+    display: flex;
+    align-items: center;
+    gap: var(--size-xs);
 }
 .member-container {
     gap: var(--size-xs);
@@ -265,6 +273,11 @@
 }
 .workspace-title .task-share {
     margin-left: auto;
+}
+.workspace-title a {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-xs);
 }
 /* workspace, board & task */
 .dashboard-content .workspace,
@@ -350,9 +363,6 @@
 .task-share .dropdown-menu .social_icons .social_icon a {
     font-size: var(--size-l);
 } */
-.task-share.workspace .dropdown .link {
-    background: var(--blue);
-}
 input:valid.input-join,
 .input-join,
 .dropdown.board-visibility .dropdown-menu form select:valid,
@@ -994,6 +1004,9 @@ input[type="radio"]:checked + .radio-button {
     display: flex;
     flex-direction: column;
     gap: var(--size-xs);
+    overflow-y: auto;
+    max-height: 70vh;
+    box-sizing: border-box;
 }
 .notification-content {
     display: flex;

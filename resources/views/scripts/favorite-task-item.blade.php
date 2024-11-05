@@ -1,9 +1,7 @@
 <script>
     function toggleFavoriteTaskItem(checkbox) {
-        const taskId = checkbox.getAttribute('data-task-item-id');
-        const taskId = checkbox.getAttribute('data-task-id');
-        const url = checkbox.checked ? `/task-favorite/${taskId}` : `/task-unfavorite/${taskId}`;
-        
+        const taskitemId = checkbox.getAttribute('data-task-item-id');
+        const url = checkbox.checked ? `/task-item-favorite/${taskitemId}` : `/task-item-unfavorite/${taskitemId}`;
         fetch(url, {
             method: 'POST',
             headers: {

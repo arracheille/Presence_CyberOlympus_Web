@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
                 // $workspaces     = Workspace::where('user_id', auth()->user()->id)->where('id', Request::segment(2))->get();
                 $workspaces     = Workspace::where('id', Request::segment(2))->get();
                 $workspacesList = Member::where('user_id', auth()->user()->id)->get();
-                $notifications = Notification::where('user_id', auth()->user()->id)->get();
+                $notifications  = Notification::where('user_id', auth()->user()->id)->get();
 
                 $view->with('workspaces', $workspaces);
                 $view->with('workspacesList', $workspacesList);

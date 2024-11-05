@@ -11,15 +11,23 @@
                     </div>
                     <div class="dropdown-notification">
                         @foreach ($notifications as $notification)
-                            <div class="notification-content">
-                                <p class="text-small">Schedule Notification</p>
-                                <p>Schedule 
+                        @if ($notification->read_at == 0)
+                        <div class="notification-content">
+                            <p class="text-small">Schedule Notification</p>
+                            <p>Schedule 
+                                @if ($notification->schedule)
                                     <a href="{{ route('schedule.index', ['workspace' => $notification->schedule->workspace_id, 'id' => $notification->schedule->id]) }}">
                                         {{ $notification->schedule->title }}
                                     </a>
                                     is almost due!
-                                </p>
-                            </div>
+                                @else
+                                    <p>Schedule not found.</p>
+                                @endif
+                            </p>
+                        </div>
+                        @else
+                            
+                        @endif
                         @endforeach
                     </div>
                 </div>

@@ -108,7 +108,7 @@ Route::middleware('auth')->group(function () {
                                 ->where('user_id', $schedule->user->id)
                                 ->first();
         if ($findWorkspace) {
-            return redirect('/workspace/' . $findWorkspace->id . '/schedule');
+            return redirect('schedule.index');
         } else {
             return redirect()->back()->with('error', 'Workspace not found!');
         }
@@ -146,7 +146,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/schedule-delete/{schedule}', [ScheduleController::class, 'destroy']);
     Route::post('/schedule-restore/{schedule}', [ScheduleController::class, 'restore'])->withTrashed();
 
-    Route::post('/schedule/read-notification', [ScheduleController::class, 'read'])->name('notifications.read');
+    Route::put('/schedule/read-notification', [ScheduleController::class, 'read'])->name('notifications.read');
     
     Route::post('/task-create', [TaskController::class, 'create']);
     Route::get('/task-edit/{task}', [TaskController::class, 'edit']);

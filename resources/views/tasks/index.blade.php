@@ -283,24 +283,29 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.3/Sortable.min.js" integrity="sha512-8AwTn2Tax8NWI+SqsYAXiKT8jO11WUBzTEWRoilYgr5GWnF4fNqBRD+hCr4JRSA1eZ/qwbI+FPsM3X/PQeHgpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
+        let id = "{{ request()->query('id') }}"; 
+        if(id){
+            openEdittaskitem(id)
+        }
+
         function getLocalDatetimeString(date) {
             var year = date.getFullYear();
             var month = ("0" + (date.getMonth() + 1)).slice(-2);
             var day = ("0" + date.getDate()).slice(-2);
-            var hours = "00";
-            var minutes = "00";
+            var hours = ("0" + date.getHours()).slice(-2);
+            var minutes = ("0" + date.getMinutes()).slice(-2);
             return `${year}-${month}-${day}T${hours}:${minutes}`;
         }
-        
+
         var today = new Date();
         var tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
-        
+
         var startDateInputs = document.querySelectorAll('input[id^="start-date"]');
         startDateInputs.forEach(function(input) {
             input.value = getLocalDatetimeString(today);
         });
-        
+
         var endDateInputs = document.querySelectorAll('input[id^="end-date"]');
         endDateInputs.forEach(function(input) {
             input.value = getLocalDatetimeString(tomorrow);
@@ -337,21 +342,14 @@
         }
 
         function ToggleFormEditChecklist(id) {
-            // document.getElementById('edit-checklist-form' + id).style.display = 'flex';
-            // document.getElementById('checklist-item-check' + id).style.display = 'none';
 
             const form = document.getElementById('edit-checklist-form' + id);
             const checklistItem = document.getElementById('checklist-item-check' + id);
 
-            console.log('Form:', form); // Debugging: Pastikan form ditemukan
-            console.log('Checklist Item:', checklistItem); // Debugging: Pastikan checklist item ditemukan
-
-            // Tampilkan form edit dan sembunyikan item checklist
             if (form && checklistItem) {
-                form.style.display = 'flex'; // Pastikan style-nya diubah ke flex
+                form.style.display = 'flex';
                 checklistItem.style.display = 'none';
 
-                // Tambahkan event listener untuk mendeteksi klik di luar form
                 document.addEventListener('click', function handleClickOutside(event) {
                     if (!form.contains(event.target) && !event.target.closest('button')) {
                         // Jika klik di luar form dan tombol, sembunyikan form
@@ -449,7 +447,6 @@
                     }
                 }
             })
-        }
 
         // function checklist(id, checklistTitle) {
         //     let is_checked = $('#checklist'+id).is(":checked") == true ? 1 : 0;
@@ -480,5 +477,6 @@
         //         }
         //     })
         // }
+        }
     </script>    
 </x-app-layout>
