@@ -103,7 +103,7 @@
     <h4>Archived Task Items</h4>
     <div class="wrapper" id="to-do-list-container">
         <div class="task-container" id="to-do-body">
-            @foreach ($Archived_taskitems as $taskitem)
+            @forelse ($Archived_taskitems as $taskitem)
             @php
             $task_color = match ($taskitem->tasks['background_color']) {
                 'gradient-orange' => 'gradient-orange',
@@ -166,7 +166,9 @@
                     </div>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <p>You don't have an archived Task Item Yet!</p>
+            @endforelse
         </div>
     </div>
     <h4>Archived Schedules</h4>

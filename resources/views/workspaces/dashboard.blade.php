@@ -1,6 +1,6 @@
 <x-app-layout>
-    @include('components.css-schedule')
-  <div class="dashboard-top">
+    @include('components.workspace-weekly-schedule')
+    <div class="dashboard-top">
         <div class="content dashboard-workspace gradient-v-blue">
             <div class="workspace-title">
                 <img src="https://ui-avatars.com/api/?name={{ urlencode($workspace->title) }}&color=FFFFFF&background=2929CC&rounded=true&bold=true" class="icon" alt="Avatar">
@@ -59,7 +59,13 @@
     <div class="dashboard-bottom">
         <div class="dashboard-schedule">
             <h3>Weekly Workspace Schedules</h3>
-            <div class="dashboard-schedule-container">
+            @if($workspace->schedules->isEmpty())
+                <p>Nobody created a schedule on this workspace yet!</p>
+            @else
+                <div id="calendar"></div>
+            @endif
+  
+            {{-- <div class="dashboard-schedule-container">
                 @if($workspace->schedules->isEmpty())
                 <p>Nobody created a schedule on this workspace yet!</p>
                 @else
@@ -81,7 +87,7 @@
                 </div>
                 @endforeach
             @endif
-            </div>
+            </div> --}}
         </div>
         <div class="dashboard-board">
             <h3>Newest Workspace Boards</h3>

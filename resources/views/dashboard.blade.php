@@ -1,5 +1,5 @@
 <x-app-layout>
-  {{-- @include('components.css-schedule') --}}
+  @include('components.weekly-schedule')
   <div class="dashboard-top">
       <div class="content gradient-v-orange">
         <button class="btn-trans">Check-In Attendance</button>
@@ -19,29 +19,11 @@
     <div class="dashboard-bottom">
       <div class="dashboard-schedule">
         <h3>Your Newest Weekly Schedules</h3>
-          <div class="dashboard-schedule-container">
-            @if($schedules->isEmpty())
-              <p>No schedules</p>
-          @else
-              @foreach ($schedules as $schedule)
-              @php
-              $color = match ($schedule['background_color']) {
-                'gradient-orange' => 'gradient-orange',
-                'gradient-blue' => 'gradient-blue',
-                'gradient-green' => 'gradient-green',
-                'gradient-red' => 'gradient-red',
-                'gradient-pink' => 'gradient-pink',
-                'gradient-purple' => 'gradient-purple',
-                default => 'darkblue',
-              };
-              @endphp
-              <div class="content" id="{{ $color }}">
-                <h3>{{ $schedule->title }}</h3>
-                <p>{{ \Carbon\Carbon::parse($schedule->start)->format('l, F j, Y H:i') }} - {{ \Carbon\Carbon::parse($schedule->end)->format('l, F j, Y H:i') }}</p>
-              </div>
-              @endforeach
-          @endif
-          </div>
+        @if($schedules->isEmpty())
+          <p>No schedules</p>
+        @else
+          <div id="calendar"></div>
+        @endif
       </div>
       <div class="dashboard-board">
         <h3>Your Newest Boards</h3>

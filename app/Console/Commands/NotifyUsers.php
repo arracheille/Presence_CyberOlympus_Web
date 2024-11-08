@@ -24,31 +24,42 @@ class NotifyUsers extends Command
      * @var string
      */
     protected $description = 'Schedule Due Date';
-
+    
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $schedules = Schedule::with('user')
-                    ->where('end', '>=', now())
-                    ->where('end', '<=', now()->addDays(3))
-                    ->whereHas('user')
-                    ->get();
+        $getUserSchedules = User::whereHas('schedules', function($query) {
+                            $query->where('end', '>=', now())
+                            ->where('end', '<=', now()->addDays(3))
+                            ->whereHas('user');
+                            })
+                            ->groupBy('users.id', 'users.name', 'users.email', 'users.usertype', 'users.email_verified_at', 'users.password', 'users.remember_token', 'users.created_at', 'users.updated_at')
+                            ->get();
 
-        $arrayTask = [];
-        foreach ($schedules as $schedule) {
-            $mailUser = User::where('id', $schedule->user->id)->first();
-            $arrayTask[] = $mailUser;
-            Mail::to($mailUser)->send(new ScheduleMail($schedules->where('user_id', $schedule->user->id)));
+            // echo $getUserSchedules;
+            // return false;
 
-            $notifications = new Notification();
-            $notifications->user_id     = $schedule->user->id;
-            $notifications->schedule_id = $schedule->id;
-            $notifications->due_date_id = null;
-            $notifications->read_at     = false;
-            $notifications->save();
-        }
+        foreach ($getUserSchedules as $userSchedule) {
+            $schedules = Schedule::where('end', '>=', now())
+                        ->where('end', '<=', now()->addDays(3))
+                        ->where('user_id', $userSchedule->id)
+                        ->get();
+
+            foreach ($schedules as $schedule) {
+                // $mailUser = User::where('id', $schedule->user->id)->first();
+    
+                $notifications = new Notification();
+                $notifications->user_id     = $schedule->user->id;
+                $notifications->schedule_id = $schedule->id;
+                $notifications->due_date_id = null;
+                $notifications->read_at     = false;
+                $notifications->save();
+            }
+
+            Mail::to($userSchedule)->send(new ScheduleMail($schedules->where('user_id', $userSchedule->id)));
+        }   
 
         return 0;
     }

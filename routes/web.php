@@ -58,7 +58,9 @@ Route::middleware('auth')->group(function () {
         $Archived_workspaces = Workspace::where('user_id', auth()->user()->id)->onlyTrashed()->get();
         $Archived_boards = Board::where('user_id', auth()->user()->id)->onlyTrashed()->get();
         $Archived_tasks = Task::where('user_id', auth()->user()->id)->onlyTrashed()->get();
-        $Archived_taskitems = TaskItem::onlyTrashed()->get();
+        $Archived_taskitems = TaskItem::whereHas('tasks', function ($query) {
+                                    $query->where('user_id', auth()->user()->id);
+                                })->onlyTrashed()->get();
         $Archived_schedules = Schedule::where('user_id', auth()->user()->id)->onlyTrashed()->get();
         return view('archive.user-archive', compact('Archived_workspaces', 'Archived_boards', 'Archived_tasks', 'Archived_taskitems', 'Archived_schedules', 'user'));
     })->name('user.archive');

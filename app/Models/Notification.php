@@ -10,7 +10,7 @@ class Notification extends Model
     use HasFactory;
 
     public function schedule() {
-        return $this->belongsTo(Schedule::class, 'schedule_id');
+        return $this->belongsTo(Schedule::class, 'schedule_id')->where('deleted_at', NULL);
     }
 
     public function user() {
