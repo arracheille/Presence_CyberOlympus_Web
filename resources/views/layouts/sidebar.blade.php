@@ -98,8 +98,8 @@
   @endforeach
   @endforeach
   </ul>
+  @foreach ($workspaces as $workspace)
   <ul>
-    @foreach ($workspaces as $workspace)
     <li>
       <a href="{{ route('schedule.index', ['workspace' => $workspace->id]) }}" 
         class="{{ Route::is('schedule.index', ['workspace' => $workspace->id]) ? 'active' : '' }}">
@@ -107,17 +107,16 @@
         <h4>{{ __('Schedule') }}</h4>
       </a>
     </li>
-    @endforeach
   </ul>
   <ul>
     <li>
-      <a href="{{ route('attendance') }}" class="{{ request()->is('attendance') ? 'active' : '' }}">
-          <i class="fa-solid fa-clipboard-user"></i>
-          <h4>{{ __('Attendance') }}</h4>
+      <a href="{{ route('attendance.index', ['workspace' => $workspace->id]) }}" 
+        class="{{ Route::is('attendance.index', ['workspace' => $workspace->id]) ? 'active' : '' }}">
+        <i class="fa-solid fa-clipboard-user"></i>
+        <h4>{{ __('Attendance') }}</h4>
       </a>
     </li>
   </ul>
-  @foreach ($workspaces as $workspace)
   <ul>
     <li>
       <a href="{{ route('workspaces.settings', ['workspace' => $workspace->id]) }}" 

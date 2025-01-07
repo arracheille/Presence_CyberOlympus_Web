@@ -17,7 +17,7 @@
                 </form>
                 <div class="dropdown">
                     <button class="link gradient-h-blue">Filter</button>
-                    <div class="dropdown-menu label-modal dropdown-color"">
+                    <div class="dropdown-menu label-modal dropdown-color">
                         <div class="dropdown-title-close">
                             <h4>Filter Task & Task Item</h4>
                             <span class="close">&times;</span>

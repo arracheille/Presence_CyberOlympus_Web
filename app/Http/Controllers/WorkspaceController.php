@@ -8,37 +8,6 @@ use Illuminate\Http\Request;
 
 class WorkspaceController extends Controller
 {
-    public function index() {
-        $workspaces = Workspace::latest()->paginate(5);
-        return response()->json($workspaces);
-    }
-
-    public function create_workspace(Request $request) {
-        $workspaces = $request->validate([
-            'title' => 'required',
-            'type' => 'required',
-            'description' => 'nullable',
-        ]);
-
-        $workspaces['title'] = strip_tags($workspaces['title']);
-        $workspaces['type'] = strip_tags($workspaces['type']);
-        $workspaces['description'] = strip_tags($workspaces['description']);
-        $workspaces['user_id'] = auth()->id();
-        $workspaces['email'] = auth()->user()->email;
-        $workspaces['unique_code'] = md5(microtime(true).mt_Rand());
-        $workspacesId = Workspace::create($workspaces);
-
-        $createMember               = new Member();
-        $createMember->user_id      = auth()->id();
-        $createMember->email        = auth()->user()->email;
-        $createMember->role         = 'admin';
-        $createMember->workspace_id = $workspacesId->id;
-        $createMember->unique_code  = $workspacesId->unique_code;
-        $createMember->save();
-        
-        return redirect('/workspace');
-    }
-
     public function create(Request $request) {
         $workspaces = $request->validate([
             'title' => 'required',
@@ -78,7 +47,7 @@ class WorkspaceController extends Controller
 
         $workspaces['title'] = strip_tags($workspaces['title']);        
         $workspaces['type'] = strip_tags($workspaces['type']);
-        $workspaces['description'] = strip_tags($workspaces['description']);
+        $workspaces['description'] = strip_tags($workspaces['description']);                                        
         $workspace->update($workspaces);
         return redirect('/workspace');
     }

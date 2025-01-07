@@ -6,9 +6,6 @@
             <p>From workspace <strong>{{ $workspace->title }}</strong></p>
         </div>
         <div id="calendar"></div>
-        @isset($id)
-        <div id="includeIdSchedule" ></div>
-        @endisset
       </div>
     @foreach ($workspace->schedules as $schedule)
     <div id="editscheduleModal-{{ $schedule->id }}" class="modal">
@@ -147,7 +144,7 @@
 
 
     </script>
-    <script src="{{ asset('fullcalendar-6.1.15/dist/index.global.js') }}"></script>
+    {{-- <script src="{{ asset('fullcalendar-6.1.15/dist/index.global.js') }}"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         var calendarEl = document.getElementById("calendar");
@@ -205,7 +202,5 @@
         });
         calendar.render();
       });
-    </script>
-    
-    
+    </script>  --}}
 </x-app-layout>    

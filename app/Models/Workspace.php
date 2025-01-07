@@ -39,6 +39,18 @@ class Workspace extends Model
     }
 
     public function taskitem() {
-        return $this->hasMany(taskitem::class);
+        return $this->hasMany(TaskItem::class);
+    }
+
+    public function attendances() {
+        return $this->hasMany(Attendance::class);
+    }
+
+    public function locations() {
+        return $this->hasMany(AttendanceLocation::class);
+    }
+
+    public function infos() {
+        return $this->hasMany(AttendanceInfo::class);
     }
 }

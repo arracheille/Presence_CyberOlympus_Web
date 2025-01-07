@@ -28,11 +28,11 @@ table.admin-table {
     border-collapse: collapse;
     margin-bottom: var(--size-m);
 }
-table.admin-table tbody{
-    background-color: var(--blue);
+table.admin-table tbody {
+    background: var(--blue);
 }
-table.admin-table tbody.tbody-board{
-    background-color: var(--darkblue);
+table.admin-table tbody.tbody-board {
+    background: var(--darkblue);
 }
 table.admin-table,
 table.admin-table th,
@@ -55,14 +55,14 @@ table.admin-table td.text-center {
     text-align: center;
 }
 .present {
-    background-color: var(--green-horizontal);
+    background: var(--green-horizontal);
     color: var(--darkblue);
 }
 .absent {
-    background-color: var(--orange-horizontal);
+    background: var(--orange-horizontal);
 }
 .late {
-    background-color: var(--red-horizontal);
+    background: var(--red-horizontal);
     color: var(--darkblue);
 }
 .dashboard-crud {
@@ -90,7 +90,7 @@ table.admin-table td.text-center {
 td.admin-th-todo {
     min-width: 20vw;
 }
-td.admin-th-todo p{
+td.admin-th-todo p {
     margin-top: 7px;
 }
 .user-details {
@@ -116,26 +116,26 @@ td.admin-th-todo p{
     flex: 1;
     padding: var(--size-m);
     border-radius: var(--border-container);
-    background-color: var(--blue);
+    background: var(--blue);
 }
-.user-attendance-container{
+.user-attendance-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: var(--size-xs);
 }
-.user-attendance{
+.user-attendance {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.user-boards-tasks{
+.user-boards-tasks {
     display: flex;
     flex-direction: column;
     gap: var(--size-s);
 }
-.user-board-content{
+.user-board-content {
     padding: var(--size-s) var(--size-l);
     border-radius: var(--border-container);
     text-align: center;

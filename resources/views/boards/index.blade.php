@@ -150,11 +150,11 @@
       @include('components.btn-copy')
     <script>
         function openAddboard() {
-        document.getElementById('addboardModal').style.display = 'block';
+            document.getElementById('addboardModal').style.display = 'block';
         }
     
         function closeAddboard() {
-        document.getElementById('addboardModal').style.display = 'none';
+            document.getElementById('addboardModal').style.display = 'none';
         }
 
         function openEditboard(id) {

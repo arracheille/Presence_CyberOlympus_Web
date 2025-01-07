@@ -17,7 +17,7 @@ class BoardController extends Controller
         ]);
 
         $boards['title'] = strip_tags($boards['title']);
-        $tasks['workspace_id'] = $request->workspace_id;
+        $boards['workspace_id'] = $request->workspace_id;
         $boards['background_color'] = strip_tags($boards['background_color']);
         $boards['visibility'] = strip_tags($boards['visibility']);
 

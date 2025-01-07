@@ -11,12 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attendances', function (Blueprint $table) {
+        Schema::create('attendance_infos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
             $table->foreignId('workspace_id')->constrained();
-            $table->string('status');
-            $table->string('attendance_at');
+            $table->string('min_check_in');
+            $table->string('max_check_in');
+            $table->string('min_check_out');
+            $table->string('max_check_out');
+            $table->string('min_break_in');
+            $table->string('max_break_in');
+            $table->string('min_break_out');
+            $table->string('max_break_out');
             $table->timestamps();
         });
     }
@@ -26,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attendances');
+        Schema::dropIfExists('attendance_infos');
     }
 };

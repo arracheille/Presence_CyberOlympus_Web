@@ -1,3 +1,9 @@
+.container.landing .logo {
+    position: fixed;
+    top: 0;
+    height: 70px;
+}
+.container.landing,
 .container.register,
 .container.login {
     display: flex;
@@ -16,6 +22,31 @@
 }
 .container .logo span img {
     width: 100%;
+}
+.landing-content {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--size-s);
+}
+.landing-content h2 {
+    text-align: center;
+    max-width: 80%;
+}
+.landing-buttons-container {
+    display: flex;
+    gap: var(--size-xs);
+}
+.landing-buttons-container a:first-child {
+    background: var(--orange-vertical);
+}
+.landing-buttons-container a:nth-child(2) {
+    background: var(--blue-vertical);
+}
+.landing-buttons-container a:nth-child(3) {
+    background: var(--green-vertical);
 }
 .register-container,
 .login-container {
@@ -94,83 +125,4 @@
     display: flex;
     flex-direction: column;
     gap: var(--size-xs);
-}
-section {
-    min-height: 100vh;
-    padding: 0 10vw 0 10vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-.navbar {
-    width: calc(100% * var(--size-m));
-    box-sizing: border-box;
-    z-index: 9;
-    top: 0;
-    padding: 0 10vw 0 10vw;
-    background-color: var(--darkblue);
-    position: fixed;
-}
-.navbar-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0 20px 0;
-    background-color: var(--darkblue);
-    border-radius: var(--border-container);
-}
-.navbar-logo {
-    max-width: 12%;
-    display: flex;
-    align-items: center;
-    gap: var(--size-xs);
-}
-.navbar-logo span {
-    width: 100%;
-}
-.navbar-logo span img {
-    width: 100%;
-}
-.navbar-logo h3 {
-    padding: 0;
-    margin: 0;
-}
-.navbar-container {
-    display: flex;
-    align-items: center;
-    gap: var(--size-m);
-}
-.navbar-container a.btn-reglog {
-    border-radius: var(--border-container);
-    padding: 5px 20px;
-}
-.navbar-links {
-    transition: transform ease-in-out 200ms;
-}
-.navbar-links:hover {
-    transform: scaleY(-3px);
-}
-.hero-container{
-    width: 80%;
-    gap: var(--size-m);
-}
-.hero-text {
-    gap: 5px;
-}
-.hero-text h1{
-    text-shadow: 0px 0px 3px var(--white);
-}
-.hero-container,
-.hero-text {
-    display: flex;
-    flex-direction: column;
-}
-.features-content {
-    background: var(--blue);
-    width: 40vw;
-}
-.features-content:first-child {
-    margin-right: auto;
-    text-align: end;
 }

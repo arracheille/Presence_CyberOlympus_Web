@@ -12,6 +12,8 @@ use App\Http\Controllers\BoardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskItemController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AttendanceInfoController;
+use App\Http\Controllers\AttendanceLocationController;
 use App\Http\Controllers\CheckController;
 use App\Http\Controllers\ChecklistController;
 use App\Http\Controllers\CodeController;
@@ -24,6 +26,9 @@ use App\Http\Controllers\LabelController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TaskitemMemberController;
 use App\Http\Controllers\WorkspaceController;
+use App\Models\Attendance;
+use App\Models\AttendanceInfo;
+use App\Models\AttendanceLocation;
 use App\Models\Member;
 use App\Models\Schedule;
 use App\Models\Board;
@@ -33,8 +38,6 @@ use App\Models\User;
 use App\Models\Workspace;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
-
-// use App\Http\Middleware\CheckMember;
 
 Route::get('/', function () {
     return view('welcome');
@@ -51,8 +54,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/attendance', [PageController::class, 'attendance'])->name('attendance');
-
     Route::get('/user-archive', function (User $user) {
         $user = User::where('id', auth()->user()->id)->first();
         $Archived_workspaces = Workspace::where('user_id', auth()->user()->id)->onlyTrashed()->get();
@@ -136,7 +137,22 @@ Route::middleware('auth')->group(function () {
 
     Route::post('favorite/{board}', [BoardController::class, 'favorite'])->name('favorite');
     Route::post('unfavorite/{board}', [BoardController::class, 'unfavorite'])->name('unfavorite');
-        
+
+    Route::post('/create-attendance-info', [AttendanceInfoController::class, 'create']);
+    Route::get('/edit-attendance-info/{attendance-info}', [AttendanceInfoController::class, 'edit']);
+    Route::put('/edit-attendance-info/{attendance-info}', [AttendanceInfoController::class, 'update']);
+    Route::delete('/delete-attendance-info/{attendance-info}', [AttendanceInfoController::class, 'destroy'])->withTrashed();
+
+    Route::post('/create-attendance-location', [AttendanceLocationController::class, 'create']);
+    Route::get('/edit-attendance-location/{location}', [AttendanceLocationController::class, 'edit']);
+    Route::put('/edit-attendance-location', [AttendanceLocationController::class, 'update'])->name('location.update');
+    Route::delete('/delete-attendance-location/{attendance-location}', [AttendanceLocationController::class, 'destroy'])->withTrashed();
+
+    Route::post('/create-attendance', [AttendanceController::class, 'create']);
+    Route::get('/edit-attendance/{attendance}', [AttendanceController::class, 'edit']);
+    Route::put('/edit-attendance/{attendance}', [AttendanceController::class, 'update']);
+    Route::delete('/delete-attendance/{attendance}', [AttendanceController::class, 'destroy'])->withTrashed();
+
     Route::put('/update-member-role', [MemberController::class, 'updaterole'])->name('member.role-update');
     
     Route::get('/edit-visibility/{board}', [BoardController::class, 'edit']);
@@ -169,7 +185,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/task-item-edit/{taskitem}', [TaskItemController::class, 'update']);
     Route::delete('/task-item-delete/{taskitem}', [TaskItemController::class, 'destroy'])->withTrashed();
     Route::post('/task-item-restore/{taskitem}', [TaskItemController::class, 'restore'])->withTrashed();
-
+    
     // Route::get('/get-task-item', function (Workspace $workspace, Board $board) {
     //     return redirect()->route('tasks.index', ['id' => $workspace->id])
     //     ->with(['board' => $board]);
@@ -272,8 +288,25 @@ Route::middleware('auth')->group(function () {
             return view('boards.index', compact('workspace', 'boards'));
         })->name('boards.index');
         
+        Route::get('/attendance-location', function (Workspace $workspace) {
+            return view('attendance.maps-here', compact('workspace'));
+        })->name('maps.index');
+        
+        Route::get('/attendance-location-details/{location}', function (Workspace $workspace, AttendanceLocation $location) {
+            $locations = AttendanceLocation::all();
+            $coordinates = $location->geofence;
+            return view('attendance.maps-edit', compact('workspace', 'locations', 'coordinates'));
+        })->name('maps.edit');
+        
+        Route::get('/attendance', function (Workspace $workspace, Request $request) {
+            $workspaces     = Workspace::where('id', $request->segment(2))->first();
+            $attendances    = Attendance::all();
+            $locations      = AttendanceLocation::all();
+            $infos          = AttendanceInfo::all();
+            return view('attendance', compact('workspace', 'attendances', 'locations', 'infos'));
+        })->name('attendance.index');
+        
         Route::get('/schedule', function (Workspace $workspace, Request $request) {
-            // dd($request->all());
             $id = $request->id ?? "";
             if ($id) {
                 $schedules = Schedule::all();

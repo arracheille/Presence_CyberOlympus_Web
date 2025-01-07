@@ -64,30 +64,6 @@
             @else
                 <div id="calendar"></div>
             @endif
-  
-            {{-- <div class="dashboard-schedule-container">
-                @if($workspace->schedules->isEmpty())
-                <p>Nobody created a schedule on this workspace yet!</p>
-                @else
-                @foreach ($workspace->schedules->where('user_id', auth()->user()->id) as $schedule)
-                @php
-                $color = match ($schedule['background_color']) {
-                    'gradient-orange' => 'gradient-orange',
-                    'gradient-blue' => 'gradient-blue',
-                    'gradient-green' => 'gradient-green',
-                    'gradient-red' => 'gradient-red',
-                    'gradient-pink' => 'gradient-pink',
-                    'gradient-purple' => 'gradient-purple',
-                    default => 'darkblue',
-                };
-                @endphp
-                <div class="content" id="{{ $color }}">
-                    <h3>{{ $schedule->title }}</h3>
-                    <p>{{ \Carbon\Carbon::parse($schedule->start)->format('l, F j, Y H:i') }} - {{ \Carbon\Carbon::parse($schedule->end)->format('l, F j, Y H:i') }}</p>
-                </div>
-                @endforeach
-            @endif
-            </div> --}}
         </div>
         <div class="dashboard-board">
             <h3>Newest Workspace Boards</h3>

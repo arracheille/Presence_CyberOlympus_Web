@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('due_dates', function (Blueprint $table) {
-            $table->foreignId('task_item_id')->constrained();
+        Schema::create('attendance_locations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('workspace_id')->constrained()->onDelete('cascade');
+            $table->json('geofence');
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('due_dates', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('attendance_locations');
     }
 };

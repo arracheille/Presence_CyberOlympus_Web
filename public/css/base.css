@@ -53,10 +53,10 @@ input,
 h5 {
     font-size: var(--size-s);
 }
-.text-small{
+.text-small {
     font-size: 12px;
 }
-.text-smaller{
+.text-smaller {
     font-size: var(--size-xs);
 }
 .gradient-text-blue {
@@ -131,7 +131,7 @@ h5 {
 #gradient-purple {
     background: var(--purple-horizontal);
 }
-#darkblue{
+#darkblue {
     background: var(--darkblue);
 }
 .gradient-h-blue,
@@ -202,13 +202,13 @@ button.icon,
     background-color: transparent;
     font-size: var(--size-m);
 }
-img.icon{
+img.icon {
     height: var(--size-xl);
 }
-img.icon-small{
+img.icon-small {
     height: var(--size-l);
 }
-img.icon-smaller{
+img.icon-smaller {
     height: 25px;
 }
 form {
@@ -248,7 +248,10 @@ textarea:valid,
 input:valid {
     background: var(--blue-horizontal);
 }
-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-moz-calendar-picker-indicator,
+input[type="time"]::-moz-calendar-picker-indicator {
     filter: invert(1);
 }
 ul,
