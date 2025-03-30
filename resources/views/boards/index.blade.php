@@ -152,7 +152,7 @@
         function openAddboard() {
             document.getElementById('addboardModal').style.display = 'block';
         }
-    
+
         function closeAddboard() {
             document.getElementById('addboardModal').style.display = 'none';
         }
